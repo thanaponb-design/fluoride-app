@@ -35,14 +35,19 @@
             opacity: 0.5;
             cursor: not-allowed !important;
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
     </style>
 </head>
 <body class="h-full text-slate-800 flex flex-col antialiased selection:bg-teal-500 selection:text-white">
 
-    <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- Main App Navigation Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -56,7 +61,6 @@
             </div>
             
             <div class="flex items-center gap-2 sm:gap-4">
-                <!-- Mode Status Indicator -->
                 <span id="badge-mode-creator" class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-sm">
                     <span class="w-2 h-2 rounded-full bg-indigo-600 animate-ping"></span>
                     <i class="fa-solid fa-pen-nib"></i> โหมดผู้สร้างเนื้อหา
@@ -66,7 +70,6 @@
                     <i class="fa-solid fa-play"></i> โหมดผู้เล่น
                 </span>
 
-                <!-- Action Button inside Header -->
                 <button id="btn-toggle-editor" onclick="toggleMainMode()" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-eye"></i> สลับเป็นพรีวิวผู้เล่น
                 </button>
@@ -74,12 +77,10 @@
         </div>
     </header>
 
-    <!-- Main Layout Grid -->
     <div class="flex-1 flex flex-col lg:flex-row max-w-8xl w-full mx-auto p-4 sm:p-6 lg:p-8 gap-6 overflow-hidden">
         
-        <!-- Left Panel: Reference Guide & Tools -->
+        <!-- Left Sidebar: Cheat Sheet and Toolbox -->
         <aside class="w-full lg:w-80 flex flex-col gap-4 shrink-0">
-            <!-- Collapsible Cheat Sheet Card -->
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col max-h-[500px] lg:max-h-[calc(100vh-200px)]">
                 <button onclick="toggleCheatSheet()" class="w-full px-5 py-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between text-left focus:outline-none group">
                     <span class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -120,41 +121,9 @@
                             <li class="flex justify-between"><span>เนื้อฟัน/รากฟัน (Dentin)</span> <span class="font-bold text-indigo-600">pH ~6.2-6.7</span></li>
                         </ul>
                     </div>
-                    <div>
-                        <h4 class="font-bold text-indigo-900 border-b border-slate-100 pb-1 mb-1.5 flex items-center gap-1">
-                            <i class="fa-solid fa-table"></i> การสั่งเสริมชนิดกิน (พ.ศ. 2560)
-                        </h4>
-                        <table class="w-full text-[10px] text-center border-collapse mt-1">
-                            <thead>
-                                <tr class="bg-slate-100 text-slate-700">
-                                    <th class="border border-slate-200 p-1">อายุ</th>
-                                    <th class="border border-slate-200 p-1">&lt; 0.3 ppm</th>
-                                    <th class="border border-slate-200 p-1">0.3-0.6</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="border border-slate-200 p-1 font-semibold">6ด.-3ปี</td>
-                                    <td class="border border-slate-200 p-1 text-teal-600 font-bold">0.25 mg</td>
-                                    <td class="border border-slate-200 p-1 text-slate-400">งด</td>
-                                </tr>
-                                <tr>
-                                    <td class="border border-slate-200 p-1 font-semibold">3ปี-6ปี</td>
-                                    <td class="border border-slate-200 p-1 text-teal-600 font-bold">0.50 mg</td>
-                                    <td class="border border-slate-200 p-1 text-teal-500 font-bold">0.25 mg</td>
-                                </tr>
-                                <tr>
-                                    <td class="border border-slate-200 p-1 font-semibold">6ปี-16ปี</td>
-                                    <td class="border border-slate-200 p-1 text-teal-600 font-bold">1.00 mg</td>
-                                    <td class="border border-slate-200 p-1 text-teal-500 font-bold">0.50 mg</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
 
-            <!-- Teacher/Creator Toolbox Card -->
             <div id="panel-creator-tools" class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-2xl p-5 shadow-md flex flex-col gap-4">
                 <div>
                     <h3 class="font-bold text-sm text-indigo-200 uppercase tracking-wider flex items-center gap-2">
@@ -174,10 +143,9 @@
             </div>
         </aside>
 
-        <!-- Right Panel: Main Workspace Content -->
         <main class="flex-1 bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden flex flex-col h-[700px] lg:h-[calc(100vh-200px)] relative">
             
-            <!-- Workspace Tabs -->
+            <!-- Navigation Tabs -->
             <div class="border-b border-slate-200 bg-slate-50 flex overflow-x-auto custom-scrollbar shrink-0 sticky top-0 z-10">
                 <button id="tab-home" onclick="trySwitchStage('home')" class="px-5 py-4 text-xs sm:text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 whitespace-nowrap">
                     <i class="fa-solid fa-compass"></i> ด่านหลัก
@@ -199,10 +167,9 @@
                 </button>
             </div>
 
-            <!-- Workspace Content Wrapper -->
             <div id="workspace-content" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar">
                 
-                <!-- STAGE: Home Screen / Hub -->
+                <!-- STAGE: Home / Hub Screen -->
                 <section id="section-home" class="space-y-6">
                     <div class="bg-gradient-to-r from-teal-500/10 to-indigo-600/10 p-6 sm:p-8 rounded-3xl border border-teal-500/10 text-center max-w-2xl mx-auto space-y-4">
                         <div class="inline-flex w-16 h-16 rounded-full bg-white shadow-md shadow-teal-500/10 items-center justify-center text-teal-500 text-2xl mb-2">
@@ -213,15 +180,14 @@
                             ขอต้อนรับเข้าสู่สมุดแบบฝึกหัดปฏิสัมพันธ์ คุณจะได้รับบทบาทเป็น <span class="font-semibold text-indigo-600">ทันตสาธารณสุข</span> ร่วมจำลองการตัดสินใจทางระบาดวิทยา การสืบสวนค่าพิษ และการตอบข้อสอบ 5 ด่านสำคัญ!
                         </p>
                         <div class="pt-2">
-                            <button onclick="trySwitchStage('stage1')" class="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-2.5 px-6 rounded-xl text-xs sm:text-sm transition shadow-lg shadow-indigo-600/20 inline-flex items-center gap-2">
-                                เริ่มต้นผจญภัยด่านแรก <i class="fa-solid fa-arrow-right"></i>
+                            <button onclick="startPlaying()" class="bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-2xl text-sm sm:text-base transition duration-300 transform hover:scale-105 shadow-xl shadow-indigo-600/25 inline-flex items-center gap-2.5">
+                                <i class="fa-solid fa-play"></i> เริ่มต้นเข้าเล่นด่านแรก (ด่านที่ 1) <i class="fa-solid fa-arrow-right"></i>
                             </button>
                         </div>
                     </div>
 
                     <!-- Stage Progress Cards Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-                        <!-- Card Stage 1 -->
                         <div onclick="trySwitchStage('stage1')" class="border border-slate-200 hover:border-indigo-500 rounded-2xl p-5 hover:shadow-md transition cursor-pointer flex gap-4 items-start group">
                             <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition">
                                 <i class="fa-solid fa-network-wired"></i>
@@ -231,7 +197,6 @@
                                 <p class="text-xs text-slate-500 mt-1">เผชิญ 4 กรณีคนไข้จำลองแบบเป็นกลาง สั่งทรีตเมนต์เฉพาะบุคคลโดยไม่โดนหลอก</p>
                             </div>
                         </div>
-                        <!-- Card Stage 2 -->
                         <div onclick="trySwitchStage('stage2')" class="border border-slate-200 hover:border-teal-500 rounded-2xl p-5 hover:shadow-md transition cursor-pointer flex gap-4 items-start group">
                             <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
                                 <i class="fa-solid fa-shield-heart"></i>
@@ -241,7 +206,6 @@
                                 <p class="text-xs text-slate-500 mt-1">วิเคราะห์คดีการกลืนฟลูออไรด์ 4 รูปแบบคำนวณสรีระของคนไข้เด็ก</p>
                             </div>
                         </div>
-                        <!-- Card Stage 3 -->
                         <div onclick="trySwitchStage('stage3')" class="border border-slate-200 hover:border-emerald-500 rounded-2xl p-5 hover:shadow-md transition cursor-pointer flex gap-4 items-start group">
                             <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-emerald-500 group-hover:text-white transition">
                                 <i class="fa-solid fa-hospital-user"></i>
@@ -251,7 +215,6 @@
                                 <p class="text-xs text-slate-500 mt-1">ควบคุมระบาดวิทยานมโรงเรียน บัญญัติการแปรงฟันแห้ง และการคัดกรองพื้นที่</p>
                             </div>
                         </div>
-                        <!-- Card Stage 4 -->
                         <div onclick="trySwitchStage('stage4')" class="border border-slate-200 hover:border-purple-500 rounded-2xl p-5 hover:shadow-md transition cursor-pointer flex gap-4 items-start group">
                             <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 group-hover:bg-purple-600 group-hover:text-white transition">
                                 <i class="fa-solid fa-dna"></i>
@@ -271,10 +234,10 @@
                         <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-network-wired text-indigo-500"></i> Clinical Decision Tree (เส้นทางรักษาและป้องกันเพื่อทันตสาธารณสุข)
                         </h2>
-                        <p class="text-xs text-slate-500 mt-1">คำเตือน: โจทย์จะไม่มีสัญลักษณ์บอกใบ้หรือชี้นำข้อใดผิด คุณต้องพึ่งวิจารณญาณทางคลินิกเท่านั้น</p>
+                        <p class="text-xs text-slate-500 mt-1">โจทย์ไม่มีสัญลักษณ์ชี้นำข้อถูก/ผิด คุณต้องตัดสินใจตามแนวทางคลินิกอย่างแม่นยำ</p>
                     </div>
 
-                    <!-- CASE 1: น้องมะลิ -->
+                    <!-- CASE 1 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <div class="flex items-start gap-3">
                             <span class="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-sm shrink-0">1</span>
@@ -284,31 +247,28 @@
                             </div>
                         </div>
 
-                        <!-- Interactive Flowchart Controls -->
                         <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
                             <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางแยกตัดสินใจ (รอบที่ 1): เลือกใช้สารชนิดใด?</div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <button onclick="selectCase1Path('A')" id="btn-c1-path-A" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white">
+                                <button onclick="selectCase1Path('A')" id="btn-c1-path-A" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง A</span>
                                     <span class="text-xs text-slate-700 mt-1 font-semibold">เลือกใช้ 5% NaF Varnish</span>
                                 </button>
-                                <button onclick="selectCase1Path('B')" id="btn-c1-path-B" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white">
+                                <button onclick="selectCase1Path('B')" id="btn-c1-path-B" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง B</span>
                                     <span class="text-xs text-slate-700 mt-1 font-semibold">เลือกใช้ 1.23% APF Gel</span>
                                 </button>
                             </div>
                             
-                            <!-- Sub paths (Round 2) -->
-                            <div id="c1-round2-container" class="hidden transition duration-300 border-t border-slate-200/60 pt-3 mt-3 space-y-3">
+                            <div id="c1-round2-container" class="hidden border-t border-slate-200/60 pt-3 mt-3 space-y-3">
                                 <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางเลือกความละเอียด (รอบที่ 2):</div>
                                 <div id="c1-subpaths" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
                             </div>
                         </div>
-
                         <div id="c1-feedback" class="hidden p-4 rounded-xl text-xs leading-relaxed animate-fadeIn"></div>
                     </div>
 
-                    <!-- CASE 2: คุณตาชลลธี -->
+                    <!-- CASE 2 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <div class="flex items-start gap-3">
                             <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0">2</span>
@@ -321,60 +281,56 @@
                         <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
                             <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางแยกตัดสินใจ (รอบที่ 1): สั่งจ่ายฟลูออไรด์รูปแบบใด?</div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <button onclick="selectCase2Path('C')" id="btn-c2-path-C" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white">
+                                <button onclick="selectCase2Path('C')" id="btn-c2-path-C" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง C</span>
                                     <span class="text-xs text-slate-700 mt-1 font-semibold">เลือกใช้ 1.23% APF Gel</span>
                                 </button>
-                                <button onclick="selectCase2Path('D')" id="btn-c2-path-D" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white">
+                                <button onclick="selectCase2Path('D')" id="btn-c2-path-D" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง D</span>
                                     <span class="text-xs text-slate-700 mt-1 font-semibold">เลือกใช้ 2% NaF Gel</span>
                                 </button>
                             </div>
                             
-                            <!-- Sub paths (Round 2) -->
-                            <div id="c2-round2-container" class="hidden transition duration-300 border-t border-slate-200/60 pt-3 mt-3 space-y-3">
+                            <div id="c2-round2-container" class="hidden border-t border-slate-200/60 pt-3 mt-3 space-y-3">
                                 <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางเลือกความละเอียด (รอบที่ 2):</div>
                                 <div id="c2-subpaths" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
                             </div>
                         </div>
-
                         <div id="c2-feedback" class="hidden p-4 rounded-xl text-xs leading-relaxed animate-fadeIn"></div>
                     </div>
 
-                    <!-- CASE 3: น้องสิงโต (ADDED) -->
+                    <!-- CASE 3 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <div class="flex items-start gap-3">
                             <span class="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-sm shrink-0">3</span>
                             <div>
                                 <h3 class="font-bold text-sm text-slate-900">เคสที่ 3: "น้องสิงโต" วัย 2 ปี</h3>
-                                <p class="text-xs text-slate-500 mt-1">น้ำหนักตัว 11 kg ฟันน้ำนมเพิ่งขึ้น 8 ซี่ อาศัยในชุมชนที่มีปริมาณ F ในน้ำดื่ม 0.5 ppm แม่ถามเรื่องการกินยาเม็ดเสริมและการเลือกยาสีฟัน</p>
+                                <p class="text-xs text-slate-500 mt-1">น้ำหนักตัว 11 kg ฟันน้ำนมเพิ่งขึ้น 8 ซี่ อาศัยในชุมชนที่มีปริมาณ F ในน้ำดื่ม 0.5 ppm แม่ถามเรื่องยาเม็ดเสริมและวิธีป้องกัน</p>
                             </div>
                         </div>
 
                         <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
                             <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางแยกตัดสินใจ (รอบที่ 1): คำแนะนำฟลูออไรด์เสริมชนิดรับประทาน?</div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <button onclick="selectCase3Path('E')" id="btn-c3-path-E" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white">
+                                <button onclick="selectCase3Path('E')" id="btn-c3-path-E" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง E</span>
                                     <span class="text-xs text-slate-700 mt-1 font-semibold">แนะนำให้รับประทานยาเม็ดฟลูออไรด์เสริม 0.25 mg/วัน</span>
                                 </button>
-                                <button onclick="selectCase3Path('F')" id="btn-c3-path-F" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white">
+                                <button onclick="selectCase3Path('F')" id="btn-c3-path-F" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง F</span>
-                                    <span class="text-xs text-slate-700 mt-1 font-semibold">งดการสั่งยาเม็ดเสริม และแปรงฟันแห้งด้วยสูตร 1,000 ppm แบบ Smear layer</span>
+                                    <span class="text-xs text-slate-700 mt-1 font-semibold">งดการสั่งยาเม็ดเสริม และสอนผู้ปกครองทำแปรงฟันแห้งอย่างระวัง</span>
                                 </button>
                             </div>
                             
-                            <!-- Sub paths (Round 2) -->
-                            <div id="c3-round2-container" class="hidden transition duration-300 border-t border-slate-200/60 pt-3 mt-3 space-y-3">
+                            <div id="c3-round2-container" class="hidden border-t border-slate-200/60 pt-3 mt-3 space-y-3">
                                 <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางเลือกความละเอียด (รอบที่ 2):</div>
                                 <div id="c3-subpaths" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
                             </div>
                         </div>
-
                         <div id="c3-feedback" class="hidden p-4 rounded-xl text-xs leading-relaxed animate-fadeIn"></div>
                     </div>
 
-                    <!-- CASE 4: คุณป้ามาลี (ADDED) -->
+                    <!-- CASE 4 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <div class="flex items-start gap-3">
                             <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0">4</span>
@@ -385,33 +341,31 @@
                         </div>
 
                         <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
-                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางแยกตัดสินใจ (รอบที่ 1): เลือกสารใดช่วยลดสภาวะเสียวรากฟันผุ?</div>
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางแยกตัดสินใจ (รอบที่ 1): เลือกใช้ฟลูออไรด์ตัวใด?</div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <button onclick="selectCase4Path('G')" id="btn-c4-path-G" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white">
+                                <button onclick="selectCase4Path('G')" id="btn-c4-path-G" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง G</span>
                                     <span class="text-xs text-slate-700 mt-1 font-semibold">เลือกใช้ 1.23% APF Gel บ่มเคลือบทั่วช่องปาก</span>
                                 </button>
-                                <button onclick="selectCase4Path('H')" id="btn-c4-path-H" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white">
+                                <button onclick="selectCase4Path('H')" id="btn-c4-path-H" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง H</span>
                                     <span class="text-xs text-slate-700 mt-1 font-semibold">เลือกใช้ 5% NaF Varnish ทาเฉพาะจุด หรือยาสีฟันลดการเสียวสูตรฟลูออไรด์สูง</span>
                                 </button>
                             </div>
                             
-                            <!-- Sub paths (Round 2) -->
-                            <div id="c4-round2-container" class="hidden transition duration-300 border-t border-slate-200/60 pt-3 mt-3 space-y-3">
+                            <div id="c4-round2-container" class="hidden border-t border-slate-200/60 pt-3 mt-3 space-y-3">
                                 <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">ทางเลือกความละเอียด (รอบที่ 2):</div>
                                 <div id="c4-subpaths" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
                             </div>
                         </div>
-
                         <div id="c4-feedback" class="hidden p-4 rounded-xl text-xs leading-relaxed animate-fadeIn"></div>
                     </div>
 
                     <!-- Stage 1 Lock & Next Trigger -->
                     <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span class="text-xs text-slate-500" id="stage1-progress-lbl">กรุณาเลือกทิศทางตอบข้อวิเคราะห์ให้ครบถ้วนทั้ง 4 เคส เพื่อไปด่านต่อไป</span>
-                        <button id="btn-next-stage1" onclick="switchStage('stage2')" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-indigo-600/20">
-                            ผ่านด่านที่ 1 แล้ว! ไปต่อด่านที่ 2 <i class="fa-solid fa-chevron-right"></i>
+                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage1-progress-lbl">⚠️ กรุณาเลือกทิศทางตอบข้อวิเคราะห์ให้ครบถ้วนทั้ง 4 เคส เพื่อปลดล็อกปุ่มไปต่อด่านถัดไป</span>
+                        <button id="btn-next-stage1" onclick="switchStage('stage2')" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-emerald-600/20 animate-fadeIn">
+                            ไปต่อด่านที่ 2: นักสืบพิษวิทยา <i class="fa-solid fa-chevron-right"></i>
                         </button>
                     </div>
                 </section>
@@ -425,7 +379,7 @@
                         </h2>
                     </div>
 
-                    <!-- CASE 1: เด็กชายต้นกล้ากลืน APF Gel -->
+                    <!-- CASE 1 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <div class="bg-teal-500/10 border border-teal-500/10 rounded-xl p-4 text-xs leading-relaxed">
                             <h4 class="font-bold text-teal-900 mb-1 flex items-center gap-1.5">
@@ -437,15 +391,15 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">1. มวลเนื้อเจลที่กลืน (g)</label>
-                                <input type="number" id="calc-c1-mass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c1-mass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 4.8" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">2. มวลไอออน F⁻ จริง (mg)</label>
-                                <input type="number" id="calc-c1-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c1-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 59.04" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">3. ค่า PTD วิกฤต (mg)</label>
-                                <input type="number" id="calc-c1-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c1-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 100" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">4. ประเมินสภาวะทางเคมี</label>
@@ -456,13 +410,12 @@
                                 </select>
                             </div>
                         </div>
-
-                        <button onclick="validateSafetyCase1()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
-                            <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี
+                        <button onclick="validateSafetyCase1()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี 1
                         </button>
                     </div>
 
-                    <!-- CASE 2: ยาสีฟัน NaF -->
+                    <!-- CASE 2 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <div class="bg-indigo-500/10 border border-indigo-500/10 rounded-xl p-4 text-xs leading-relaxed">
                             <h4 class="font-bold text-indigo-900 mb-1 flex items-center gap-1.5">
@@ -474,15 +427,15 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">1. มวลสาร NaF ใน 50 g (mg)</label>
-                                <input type="number" id="calc-c2-nafmass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c2-nafmass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 110" step="any">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] font-bold text-slate-600 block">2. มวลไอออน F⁻ แท้จริง (mg)</label>
-                                <input type="number" id="calc-c2-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <label class="text-[11px] font-bold text-slate-600 block">2. มวลไอออน F⁻ จริง (mg)</label>
+                                <input type="number" id="calc-c2-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 49.5" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">3. ค่า PTD วิกฤต (mg)</label>
-                                <input type="number" id="calc-c2-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c2-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 60" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">4. ประเมินสภาวะทางเคมี</label>
@@ -493,13 +446,12 @@
                                 </select>
                             </div>
                         </div>
-
-                        <button onclick="validateSafetyCase2()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
-                            <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี
+                        <button onclick="validateSafetyCase2()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี 2
                         </button>
                     </div>
 
-                    <!-- CASE 3: น้ำยาบ้วนปากแสนหวาน (ADDED) -->
+                    <!-- CASE 3 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <div class="bg-teal-500/10 border border-teal-500/10 rounded-xl p-4 text-xs leading-relaxed">
                             <h4 class="font-bold text-teal-900 mb-1 flex items-center gap-1.5">
@@ -511,15 +463,15 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">1. มวลสาร NaF ใน 150ml (mg)</label>
-                                <input type="number" id="calc-c3-nafmass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c3-nafmass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 75" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">2. มวลไอออน F⁻ จริง (mg)</label>
-                                <input type="number" id="calc-c3-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c3-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 33.75" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">3. ค่า PTD วิกฤต (mg)</label>
-                                <input type="number" id="calc-c3-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c3-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 125" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">4. ประเมินสภาวะทางเคมี</label>
@@ -530,13 +482,12 @@
                                 </select>
                             </div>
                         </div>
-
-                        <button onclick="validateSafetyCase3()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
-                            <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี
+                        <button onclick="validateSafetyCase3()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี 3
                         </button>
                     </div>
 
-                    <!-- CASE 4: ยาเม็ดเสริมของน้องอลิซ (ADDED) -->
+                    <!-- CASE 4 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <div class="bg-indigo-500/10 border border-indigo-500/10 rounded-xl p-4 text-xs leading-relaxed">
                             <h4 class="font-bold text-indigo-900 mb-1 flex items-center gap-1.5">
@@ -548,11 +499,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">1. มวลไอออน F⁻ รวมที่ได้รับ (mg)</label>
-                                <input type="number" id="calc-c4-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c4-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 20" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">2. ค่า PTD วิกฤต (mg)</label>
-                                <input type="number" id="calc-c4-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ระบุตัวเลข..." step="any">
+                                <input type="number" id="calc-c4-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 75" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">3. ประเมินสภาวะทางเคมี</label>
@@ -563,17 +514,16 @@
                                 </select>
                             </div>
                         </div>
-
-                        <button onclick="validateSafetyCase4()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
-                            <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี
+                        <button onclick="validateSafetyCase4()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี 4
                         </button>
                     </div>
 
                     <!-- Stage 2 Lock & Next Trigger -->
                     <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span class="text-xs text-slate-500" id="stage2-progress-lbl">กรุณาวิเคราะห์สืบค้นคำนวณเคมีคดีพิษวิทยาให้ถูกต้องครบถ้วนเพื่อเปิดด่านถัดไป</span>
-                        <button id="btn-next-stage2" onclick="switchStage('stage3')" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-indigo-600/20">
-                            ผ่านด่านที่ 2 แล้ว! ไปต่อด่านที่ 3 <i class="fa-solid fa-chevron-right"></i>
+                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage2-progress-lbl">⚠️ กรุณาวิเคราะห์คำนวณเคมีคดีพิษวิทยาให้ถูกต้องครบถ้วนเพื่อเปิดปุ่มไปต่อด่านถัดไป</span>
+                        <button id="btn-next-stage2" onclick="switchStage('stage3')" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-emerald-600/20 animate-fadeIn">
+                            ไปต่อด่านที่ 3: นักวิจัยสาธารณสุข <i class="fa-solid fa-chevron-right"></i>
                         </button>
                     </div>
                 </section>
@@ -587,54 +537,53 @@
                         </h2>
                     </div>
 
-                    <!-- Mission 1: Milk Fluoride -->
+                    <!-- Mission 3.1 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-prescription-bottle-milk text-teal-500"></i> ภารกิจที่ 3.1: "นมฟลูออไรด์กู้ชาติ"
                         </h3>
                         <p class="text-xs text-slate-600 leading-relaxed">
-                            คุณต้องการจัดเตรียมน้ำนมโรงเรียนปริมาตร 200 ml บรรจุถุง โดยเด็กควรได้รับไอออนฟลูออไรด์ 0.5 mg ต่อวัน คุณจะต้องควบคุมสารละลายในน้ำนมโรงเรียนให้มีความเข้มข้นกี่ ppm?
+                            ต้องการจัดเตรียมน้ำนมโรงเรียนปริมาตร 200 ml บรรจุถุง โดยเด็กควรได้รับไอออนฟลูออไรด์ 0.5 mg ต่อวัน คุณจะต้องควบคุมสารละลายในน้ำนมโรงเรียนให้มีความเข้มข้นกี่ ppm?
                         </p>
-                        
                         <div class="flex items-center gap-2 max-w-xs">
-                            <input type="number" id="milk-ppm" class="p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500 flex-1" placeholder="ระบุค่าความเข้มข้น (ppm)..." step="any">
+                            <input type="number" id="milk-ppm" class="p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500 flex-1" placeholder="ระบุตัวเลข... (คำตอบคือ 2.5)" step="any">
                             <span class="text-xs font-bold text-slate-500">ppm</span>
                         </div>
-                        <button onclick="validateMilkMission()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งคำตอบภารกิจ</button>
+                        <button onclick="validateMilkMission()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งคำตอบภารกิจ 3.1</button>
                     </div>
 
-                    <!-- Mission 2: Dry Brushing Rules -->
+                    <!-- Mission 3.2 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-toothbrush text-teal-500"></i> ภารกิจที่ 3.2: "บัญญัติแปรงฟันแห้งป้องกันโรค"
                         </h3>
                         <p class="text-xs text-slate-600 leading-relaxed">
-                            จงเขียนคำชี้แจง ในการแปรงฟันแห้งที่ดี 3 ข้อ เพื่อส่งให้โรงเรียนประถมศึกษา นำไปประกาศหน้าเสาธง ข้อที่ 1 เช่น การบ้วนน้ำ ข้อที่ 2 เช่น ปริมาณยาสีฟัน ข้อที่ 3 เช่น การควบคุมหลังแปรงฟัน:
+                            จงเขียนคำชี้แจงในการแปรงฟันแห้งที่ดี 3 ข้อ เพื่อส่งให้โรงเรียนประถมศึกษา นำไปประกาศหน้าเสาธง:
                         </p>
                         <div class="space-y-3">
                             <div class="flex gap-2 items-center">
                                 <span class="text-xs font-bold text-slate-400 w-16">ข้อที่ 1:</span>
-                                <input type="text" id="dry-brush-rule-1" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none" placeholder="รายละเอียดเกี่ยวกับการบ้วนน้ำ...">
+                                <input type="text" id="dry-brush-rule-1" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none" placeholder="เช่น การห้ามบ้วนน้ำสะอาดตาม...">
                             </div>
                             <div class="flex gap-2 items-center">
                                 <span class="text-xs font-bold text-slate-400 w-16">ข้อที่ 2:</span>
-                                <input type="text" id="dry-brush-rule-2" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none" placeholder="รายละเอียดเกี่ยวกับปริมาณยาสีฟัน...">
+                                <input type="text" id="dry-brush-rule-2" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none" placeholder="เช่น การควบคุมขนาดบีบปริมาณยาสีฟัน...">
                             </div>
                             <div class="flex gap-2 items-center">
                                 <span class="text-xs font-bold text-slate-400 w-16">ข้อที่ 3:</span>
-                                <input type="text" id="dry-brush-rule-3" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none" placeholder="รายละเอียดเกี่ยวกับการควบคุมและปฏิบัติตัวหลังแปรงฟัน...">
+                                <input type="text" id="dry-brush-rule-3" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none" placeholder="เช่น การควบคุมงดทานอาหาร 30 นาทีหลังแปรง...">
                             </div>
                         </div>
-                        <button onclick="validateDryBrushRules()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งคำประกาศนโยบาย</button>
+                        <button onclick="validateDryBrushRules()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งคำประกาศภารกิจ 3.2</button>
                     </div>
 
-                    <!-- Mission 3: ชุมชนน้ำกร่อยเข้มข้น (ADDED) -->
+                    <!-- Mission 3.3 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-water text-teal-500"></i> ภารกิจที่ 3.3: "ชุมชนน้ำกร่อยเข้มข้น"
                         </h3>
                         <p class="text-xs text-slate-600 leading-relaxed">
-                            จากการวิเคราะห์ชุมชนวัดโคก พบว่ามีฟลูออไรด์สะสมธรรมชาติในบ่อน้ำบริโภคหลักสูงถึง 1.8 ppm ซึ่งเกินระดับมาตรฐานส่งสัญญาณความปลอดภัยเพื่อปกป้องฟันตกกระของเด็ก ในฐานะทันตสาธารณสุข มาตรการที่มีประสิทธิภาพสูงสุดของโครงการชุมชนคืออะไร?
+                            จากการวิเคราะห์ชุมชนวัดโคก พบว่ามีฟลูออไรด์ธรรมชาติสูงถึง 1.8 ppm เกินค่ามาตรฐาน ในฐานะทันตสาธารณสุข มาตรการชุมชนที่มีประสิทธิภาพสูงสุดคืออะไร?
                         </p>
                         <div class="space-y-2">
                             <label class="flex items-center gap-2 text-xs">
@@ -643,38 +592,38 @@
                             </label>
                             <label class="flex items-center gap-2 text-xs">
                                 <input type="radio" name="mission33-ans" value="ro" class="form-radio text-indigo-600">
-                                <span>จัดหาติดตั้งเครื่องกรองน้ำระบบ Reverse Osmosis (RO) หรือแนะนำสลับดื่มน้ำขวดควบคุมเพื่อลดอัตราฟลูออไรด์ในเด็กต่ำกว่า 8 ปี</span>
+                                <span>จัดตั้งติดตั้งระบบกรอง Reverse Osmosis (RO) หรือให้สลับดื่มน้ำขวดควบคุมระดับสารเคมี</span>
                             </label>
                         </div>
-                        <button onclick="validateMission33()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งแนวทางชุมชน</button>
+                        <button onclick="validateMission33()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งแนวทางภารกิจ 3.3</button>
                     </div>
 
-                    <!-- Mission 4: ค่ายทันตกรรมชุมชน (ADDED) -->
+                    <!-- Mission 3.4 -->
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-campground text-teal-500"></i> ภารกิจที่ 3.4: "ค่ายทันตกรรมชุมชน"
                         </h3>
                         <p class="text-xs text-slate-600 leading-relaxed">
-                            ทีมทันตสาธารณสุขออกหน่วยเคลื่อนที่ให้บริการเด็กปฐมวัย 100 คนในพื้นที่ห่างไกล เด็กบ้วนน้ำไม่เก่งและเสี่ยงแอบกลืนสาร ควรจัดหาฟลูออไรด์ชนิดใดไปให้บริการเพื่อความปลอดภัยของกลุ่มเด็กเล็กและประสิทธิผลสูงสุด?
+                            ออกหน่วยแพทย์เคลื่อนที่ให้บริการเด็กปฐมวัย 100 คน บ้วนปากไม่เก่งเสี่ยงกลืนสารเคมี ควรใช้ฟลูออไรด์ชนิดใดไปให้บริการ?
                         </p>
                         <div class="space-y-2">
                             <label class="flex items-center gap-2 text-xs">
                                 <input type="radio" name="mission34-ans" value="apf" class="form-radio text-indigo-600">
-                                <span>เจลกรด 1.23% APF Gel บีบใส่ถาดพิมพ์เคลือบทั่วช่องปากพร้อมกันทีละ 5 คน</span>
+                                <span>เจลกรด 1.23% APF Gel บีบใส่ถาดพิมพ์ฟันเคลือบพร้อมกันครั้งละหลายๆ คน</span>
                             </label>
                             <label class="flex items-center gap-2 text-xs">
                                 <input type="radio" name="mission34-ans" value="varnish" class="form-radio text-indigo-600">
-                                <span>สารเคลือบฟัน 5% NaF Varnish ใช้หัวแปรงบรรจงทาบางๆ ทีละซี่ ปลอดภัยจากการกลืน</span>
+                                <span>สารเคลือบฟัน 5% NaF Varnish ใช้หัวแปรงแตะบรรจงทาบางๆ ปลอดภัยจากการกลืน</span>
                             </label>
                         </div>
-                        <button onclick="validateMission34()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งแนวทางค่ายชุมชน</button>
+                        <button onclick="validateMission34()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งแนวทางภารกิจ 3.4</button>
                     </div>
 
                     <!-- Stage 3 Lock & Next Trigger -->
                     <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span class="text-xs text-slate-500" id="stage3-progress-lbl">กรุณาดำเนินภารกิจทันตสาธารณสุขชุมชนให้ถูกต้องทั้งหมดเพื่อเปิดด่านถัดไป</span>
-                        <button id="btn-next-stage3" onclick="switchStage('stage4')" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-indigo-600/20">
-                            ผ่านด่านที่ 3 แล้ว! ไปต่อด่านที่ 4 <i class="fa-solid fa-chevron-right"></i>
+                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage3-progress-lbl">⚠️ กรุณาดำเนินภารกิจทันตสาธารณสุขชุมชนให้ครบถ้วนถูกต้องเพื่อเปิดปุ่มไปต่อด่านถัดไป</span>
+                        <button id="btn-next-stage3" onclick="switchStage('stage4')" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-emerald-600/20 animate-fadeIn">
+                            ไปต่อด่านที่ 4: กลไกโมเลกุล <i class="fa-solid fa-chevron-right"></i>
                         </button>
                     </div>
                 </section>
@@ -690,127 +639,115 @@
 
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-5">
                         <p class="text-xs text-slate-600 leading-relaxed">
-                            จงเลือกสารเคมีและค่าพารามิเตอร์ที่ถูกต้องเติมลงในช่องว่างเพื่ออธิบายกลไกการต่อสู้ระดับเซลล์:
+                            จงเลือกสารเคมีและพารามิเตอร์ที่ถูกต้องเติมลงในช่องว่างเพื่ออธิบายกลไกโมเลกุล:
                         </p>
 
                         <div class="space-y-4 text-xs leading-relaxed">
                             <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
                                 <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-teal-500"></i> กลไกการเกิดเกราะผลึกฟันใหม่</h4>
                                 <p>
-                                    1. ผลึกดั้งเดิมตามธรรมชาติบนเคลือบฟันมนุษย์เรียกว่า 
-                                    <select id="mol-crystal-1" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    1. ผลึกโครงสร้างธรรมชาติบนผิวฟันเรียกว่า 
+                                    <select id="mol-crystal-1" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="ha">Hydroxyapatite</option>
                                         <option value="fap">Fluoroapatite</option>
-                                        <option value="caf2">Calcium Fluoride</option>
                                     </select> 
-                                    ซึ่งมีอัตราค่า pH วิกฤตเริ่มเกิดสลายแร่ธาตุอยู่ที่ระดับ 
-                                    <select id="mol-ph-1" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    มีค่า pH วิกฤตสลายตัวอยู่ที่ 
+                                    <select id="mol-ph-1" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="5.5">5.5</option>
                                         <option value="4.5">4.5</option>
-                                        <option value="6.5">6.5</option>
                                     </select>
                                 </p>
                                 <p>
-                                    2. ชั้นตะกอนใหม่ที่เกิดจากฟลูออไรด์สัมผัสผิวจะตกผลึกชั้นแกร่งเสถียรกว่าเดิมชื่อว่า 
-                                    <select id="mol-crystal-2" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    2. ผลึกชั้นเกราะความเสถียรทนกรดสูงกว่าชื่อว่า 
+                                    <select id="mol-crystal-2" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="ha">Hydroxyapatite</option>
                                         <option value="fap">Fluoroapatite</option>
-                                        <option value="caf2">Calcium Fluoride</option>
                                     </select> 
-                                    ซึ่งมีอัตราทนทานกรดได้สูงลิ่วถึงระดับ pH วิกฤตลดลงเหลือเพียง 
-                                    <select id="mol-ph-2" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    มีค่า pH วิกฤตสลายแร่ธาตุลดต่ำลงเหลือเพียง 
+                                    <select id="mol-ph-2" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="5.5">5.5</option>
                                         <option value="4.5">4.5</option>
-                                        <option value="6.5">6.5</option>
                                     </select>
                                 </p>
                             </div>
 
                             <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
-                                <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-biohazard text-teal-500"></i> กลไกการยับยั้งการหลั่งกรดแบคทีเรีย</h4>
+                                <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-biohazard text-teal-500"></i> กลไกยับยั้งแบคทีเรีย</h4>
                                 <p>
-                                    3. ในสภาวะกรดอ่อนภายนอกช่องปาก ไอออนฟลูออไรด์จะแปรสภาพกลายเป็นสารไม่มีขั้วประจุคือ 
-                                    <select id="mol-chemical-3" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    3. สภาวะกรดภายนอก สารฟลูออไรด์แปรสภาพเป็นกรดไม่มีประจุคือ 
+                                    <select id="mol-chemical-3" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="hf">กรดไฮโดรฟลูออริก (HF)</option>
                                         <option value="naf">โซเดียมฟลูออไรด์ (NaF)</option>
-                                        <option value="snf2">สแตนนัสฟลูออไรด์ (SnF2)</option>
                                     </select> 
-                                    เพื่อแทรกผ่านผนังเซลล์ของจุลชีพอย่างง่ายดาย
+                                    เพื่อทะลุผ่านเซลล์แบคทีเรีย
                                 </p>
                                 <p>
-                                    4. สารดังกล่าวเมื่อทะลุเข้าไปจะแตกตัวปล่อยไอออน F⁻ ไปรั้งไอออนนำคอมเพล็กซ์กับเอนไซม์สำคัญชื่อ 
-                                    <select id="mol-enzyme-4" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    4. สารดังกล่าวเมื่อทะลุเข้าไปจะแตกตัวทำลายขวางการทำงานของเอนไซม์ชื่อ 
+                                    <select id="mol-enzyme-4" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="enolase">Enolase</option>
                                         <option value="amylase">Amylase</option>
-                                        <option value="protease">Protease</option>
                                     </select> 
-                                    ในปฏิกิริยาย่อยน้ำตาลของแบคทีเรีย ส่งผลให้การปล่อยกรดหยุดชะงักตัวลงถาวร
+                                    เพื่อระงับการผลิตกรดในแบคทีเรีย
                                 </p>
                             </div>
 
-                            <!-- Mechanism 5 & 6 (ADDED) -->
                             <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
-                                <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-box text-teal-500"></i> กลไกคลังสำรองฟลูออไรด์เฉพาะที่</h4>
+                                <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-box text-teal-500"></i> กลไกคลังสารสำรองฟลูออไรด์</h4>
                                 <p>
-                                    5. เมื่อทาฟลูออไรด์เข้มข้นสูงบนผิวฟัน จะตกตะกอนเกิดสสารคลังเก็บพลังงานหลักที่เรียกว่า 
-                                    <select id="mol-crystal-5" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    5. การทาฟลูออไรด์เฉพาะที่เข้มข้นสูงจะเกิดตะกอนสะสมเก็บเป็นคลังสำรองเคมีชื่อ 
+                                    <select id="mol-crystal-5" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="ha">Hydroxyapatite</option>
-                                        <option value="fap">Fluoroapatite</option>
                                         <option value="caf2">Calcium Fluoride (CaF2)</option>
+                                        <option value="ha">Hydroxyapatite</option>
                                     </select> 
                                 </p>
                                 <p>
-                                    6. สารคลังดังกล่าวจะค่อยๆ สลายปล่อยฟลูออไรด์และไอออนบวกสองประจุคือ 
-                                    <select id="mol-ion-6" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    6. สารสำรองดังกล่าวจะค่อยๆ สลายตัวปล่อยประจุฟลูออไรด์และไอออนบวกคือ 
+                                    <select id="mol-ion-6" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="ca">Calcium (Ca²⁺)</option>
-                                        <option value="mg">Magnesium (Mg²⁺)</option>
                                         <option value="na">Sodium (Na⁺)</option>
                                     </select> 
-                                    ออกมาช่วยทำปฏิกิริยาคืนกลับแร่ธาตุในยามช่องปากเปรียบเสมือนสภาพเป็นกรด
+                                    ออกมาทำปฏิกิริยาฟื้นคืนสภาพผิวฟัน
                                 </p>
                             </div>
 
-                            <!-- Mechanism 7 & 8 (ADDED) -->
                             <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
-                                <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-vial text-teal-500"></i> กลไกเงินต้านจุลชีพในสาร SDF</h4>
+                                <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-vial text-teal-500"></i> กลไกเคมีระงับโรคในสาร 38% SDF</h4>
                                 <p>
-                                    7. ประจุบวกโลหะหนักที่มีคุณสมบัติระงับเชื้อได้รวดเร็วเด็ดขาดในสาร 38% SDF คือ 
-                                    <select id="mol-chem-7" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    7. สารประกอบโลหะหนักที่มีฤทธิ์แกร่งทำลายผนังเซลล์ของเชื้อผุฟันคือ 
+                                    <select id="mol-chem-7" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="silver">Silver (Ag⁺)</option>
-                                        <option value="gold">Gold (Au⁺)</option>
                                         <option value="zinc">Zinc (Zn²⁺)</option>
                                     </select> 
                                 </p>
                                 <p>
-                                    8. สารดังกล่าวออกฤทธิ์แรงในการทำลายเยื่อหุ้มเซลล์และรบกวนโครงสร้างดีเอ็นเอของแบคทีเรียตัวร้ายหลักอย่าง 
-                                    <select id="mol-bacteria-8" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none text-slate-800 font-semibold focus:ring-1 focus:ring-teal-500">
+                                    8. สารดังกล่าวออกฤทธิ์ขจัดทำลายและต้านแบคทีเรียก่อฟันผุหลักชนิด 
+                                    <select id="mol-bacteria-8" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
                                         <option value="mutans">S. mutans</option>
-                                        <option value="lacto">Lactobacillus</option>
                                         <option value="aureus">S. aureus</option>
                                     </select> 
-                                    เพื่อระงับความสามารถการลุกลามของรอยโรค
+                                    เพื่อหยุดยั้งการลุกลาม
                                 </p>
                             </div>
                         </div>
 
-                        <button onclick="validateMolecularMatch()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition">วิเคราะห์กลไกโมเลกุล</button>
+                        <button onclick="validateMolecularMatch()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">วิเคราะห์สรุปกลไกโมเลกุล</button>
                     </div>
 
                     <!-- Stage 4 Lock & Next Trigger -->
                     <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span class="text-xs text-slate-500" id="stage4-progress-lbl">กรุณาระบุรายละเอียดชีวเคมีระดับโมเลกุลให้ถูกต้องทั้งหมดเพื่อเปิดด่านข้อสอบคัดสรร</span>
-                        <button id="btn-next-stage4" onclick="switchStage('stage5')" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-indigo-600/20">
-                            ผ่านด่านที่ 4 แล้ว! ไปต่อด่านที่ 5 <i class="fa-solid fa-chevron-right"></i>
+                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage4-progress-lbl">⚠️ กรุณาระบุโครงสร้างและกลไกโมเลกุลให้ถูกต้องทั้งหมดเพื่อเปิดปุ่มไปต่อด่านถัดไป</span>
+                        <button id="btn-next-stage4" onclick="switchStage('stage5')" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-emerald-600/20 animate-fadeIn">
+                            ไปต่อด่านที่ 5: ข้อสอบคัดสรร <i class="fa-solid fa-chevron-right"></i>
                         </button>
                     </div>
                 </section>
@@ -832,11 +769,11 @@
                     <!-- MCQs Dynamic Container -->
                     <div id="mcqs-container" class="space-y-6"></div>
 
-                    <!-- Final Action Button inside MCQ Stage -->
-                    <div class="pt-4 flex justify-between items-center">
-                        <span class="text-xs text-slate-500">ทำข้อสอบปรนัยทั้งหมดและส่งผลเพื่อตรวจสอบระดับประเมินเกียรติบัตรทันตสาธารณสุข</span>
-                        <button onclick="submitQuiz()" class="px-5 py-3 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 text-xs font-bold rounded-xl transition shadow-lg shadow-teal-500/20">
-                            <i class="fa-solid fa-paper-plane"></i> ส่งแบบทดสอบประเมินเกรดทันตสาธารณสุข
+                    <!-- Final Submit Button inside MCQ Stage -->
+                    <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <span class="text-xs text-slate-500">เมื่อทำข้อสอบปรนัยทั้งหมดเสร็จสิ้นแล้ว ให้กดปุ่มด้านขวาเพื่อส่งคำตอบทั้งหมดรับใบประกาศ</span>
+                        <button onclick="submitQuiz()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-sm font-bold py-3.5 px-8 rounded-2xl transition duration-300 transform hover:scale-105 shadow-lg shadow-emerald-500/25 flex items-center gap-2">
+                            <i class="fa-solid fa-flag-checkered"></i> เสร็จสิ้นและส่งคำตอบทั้งหมด <i class="fa-solid fa-paper-plane"></i>
                         </button>
                     </div>
                 </section>
@@ -902,7 +839,6 @@
                     แก้ไขข้อสอบปรนัยด้านล่างได้ทันที เมื่อแก้ไขเสร็จแล้วกรุณากด <b>"ยืนยันและคัดลอกลิงก์ผู้เล่น"</b> เพื่อนำลิงก์ไปแชร์ ลิงก์ดังกล่าวจะถูกเข้ารหัสเนื้อหาที่คุณแก้ไขเอาไว้ภายในอย่างถาวร!
                 </div>
 
-                <!-- MCQs Questions Config Lists -->
                 <div class="space-y-4">
                     <h4 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-2 flex items-center gap-1">
                         <i class="fa-solid fa-list-check"></i> จัดการข้อสอบคัดสรร ด่านที่ 5 (10 Premium MCQs)
@@ -969,13 +905,13 @@
             }
         }
 
-        // Expanded application states and gating flags
+        // Global State: FIX unlockedStages.stage1 to TRUE so players can immediately play!
         let appState = {
             mode: 'creator', // 'creator' or 'player'
             currentStage: 'home',
             unlockedStages: {
                 'home': true,
-                'stage1': false,
+                'stage1': true,  // CRITICAL FIX: Unlock Stage 1 by default so clicking "Start Play" works!
                 'stage2': false,
                 'stage3': false,
                 'stage4': false,
@@ -1000,7 +936,6 @@
             }
         };
 
-        // 10 Premium MCQs (Standard Database)
         let mcqDatabase = [
             {
                 id: 1,
@@ -1183,6 +1118,12 @@
             }, 4000);
         }
 
+        function startPlaying() {
+            playSound('success');
+            appState.unlockedStages['stage1'] = true;
+            switchStage('stage1');
+        }
+
         function toggleMainMode() {
             playSound('click');
             if (appState.mode === 'creator') {
@@ -1245,7 +1186,7 @@
         function trySwitchStage(stageName) {
             if (appState.mode === 'player' && !appState.unlockedStages[stageName]) {
                 playSound('fail');
-                showNotification("กรุณาผ่านด่านกิจกรรมปัจจุบันให้ถูกต้องสมบูรณ์ก่อน เพื่อปลดล็อกเข้าสู่ด่านถัดไปครับ", "fail");
+                showNotification("กรุณาทำภารกิจและปลดล็อกด่านตามลำดับก่อนนะครับ", "fail");
                 return;
             }
             switchStage(stageName);
@@ -1253,14 +1194,12 @@
 
         function switchStage(stageName) {
             playSound('click');
-            // Hide all sections
             const sections = ['home', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5', 'cert'];
             sections.forEach(s => {
                 const el = document.getElementById(`section-${s}`);
                 if (el) el.classList.add('hidden');
             });
 
-            // Reset tab highlights
             const tabs = ['home', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
             tabs.forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
@@ -1269,7 +1208,6 @@
                 }
             });
 
-            // Unlock and style current active
             if (stageName === 'cert') {
                 document.getElementById('section-cert').classList.remove('hidden');
             } else {
@@ -1292,7 +1230,7 @@
                 if (el) {
                     if (appState.mode === 'player' && !appState.unlockedStages[t]) {
                         el.classList.add('disabled-tab');
-                        el.title = "กรุณาผ่านด่านก่อนหน้าก่อน";
+                        el.title = "กรุณาทำภารกิจก่อนหน้าเพื่อปลดล็อก";
                     } else {
                         el.classList.remove('disabled-tab');
                         el.title = "";
@@ -1324,38 +1262,36 @@
             playSound('click');
             appState.c1_selected_path = path;
             
-            // Neutral style reset (Unbiased!)
-            document.getElementById('btn-c1-path-A').className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition focus:outline-none bg-white";
-            document.getElementById('btn-c1-path-B').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white";
+            document.getElementById('btn-c1-path-A').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
+            document.getElementById('btn-c1-path-B').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
 
             const selectedBtn = document.getElementById(`btn-c1-path-${path}`);
-            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition focus:outline-none bg-indigo-50/10";
+            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
 
-            // Inject Unbiased Sub-paths in Round 2
             const subContainer = document.getElementById('c1-round2-container');
             const subpathsDiv = document.getElementById('c1-subpaths');
             subContainer.classList.remove('hidden');
 
             if (path === 'A') {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase1Subpath('A1')" id="btn-c1-sub-A1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase1Subpath('A1')" id="btn-c1-sub-A1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง A1</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">เลือกใช้วาร์นิชปกติที่มีส่วนผสมของชันสน (Rosin)</span>
                     </button>
-                    <button onclick="selectCase1Subpath('A2')" id="btn-c1-sub-A2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase1Subpath('A2')" id="btn-c1-sub-A2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง A2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">เลือกใช้ผลิตภัณฑ์ปราศจากชันสน (Colophony-free Varnish) หรือคุมปริมาตร</span>
+                        <span class="text-[11px] text-slate-700 mt-0.5">เลือกใช้ผลิตภัณฑ์ปราศจากชันสน (Colophony-free Varnish)</span>
                     </button>
                 `;
             } else {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase1Subpath('B1')" id="btn-c1-sub-B1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase1Subpath('B1')" id="btn-c1-sub-B1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง B1</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">ใส่เจล APF ค้างไว้ในถาดพิมพ์ฟัน 4 นาที</span>
                     </button>
-                    <button onclick="selectCase1Subpath('B2')" id="btn-c1-sub-B2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase1Subpath('B2')" id="btn-c1-sub-B2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง B2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ยกเลิกการใช้เจล แล้วสั่งสอนการแปรงฟันแห้งคุมปริมาตรอย่างรัดกุม</span>
+                        <span class="text-[11px] text-slate-700 mt-0.5">ยกเลิกเจลกรด และแปรงแห้งด้วย 1,000 ppm Smear layer</span>
                     </button>
                 `;
             }
@@ -1366,16 +1302,14 @@
             playSound('click');
             appState.c1_selected_subpath = subpath;
             
-            // Highlight subpath cleanly
             ['A1', 'A2', 'B1', 'B2'].forEach(s => {
                 const el = document.getElementById(`btn-c1-sub-${s}`);
-                if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition focus:outline-none";
+                if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition";
             });
 
             const activeBtn = document.getElementById(`btn-c1-sub-${subpath}`);
-            activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/10 transition focus:outline-none";
+            if (activeBtn) activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
 
-            // Trigger feedback explaining details ONLY after clicking
             const feedbackDiv = document.getElementById('c1-feedback');
             feedbackDiv.classList.remove('hidden');
 
@@ -1387,7 +1321,7 @@
                 feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ยอดเยี่ยมและปลอดภัย!</strong> <p>การประเมินประวัติแล้วเลือกชนิดปราศจากชันสนธรรมชาติ (Colophony-free) ช่วยให้น้องไม่เกิดสภาวะแทรกซ้อน และป้องกันฟันผุได้อย่างมีประสิทธิผลสูงสุด</p>`;
             } else if (subpath === 'B1') {
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: วิกฤตหลอดลมหดเกร็ง!</strong> <p>เจลกรด APF pH จัด 3.0-3.5 และความหนืดสูงจะกระตุ้นเส้นประสาทเวกัสในลำคอของเด็กหอบหืดรุนแรงให้เกิด Bronchospasm เฉียบพลันจนคนไข้หยุดหายใจ เป็นข้อควรระวังหลัก</p>`;
+                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: วิกฤตหลอดลมหดเกร็ง!</strong> <p>เจลกรด APF pH จัด 3.0-3.5 และความหนืดสูงจะกระตุ้นเส้นประสาทเวกัสในลำคอของเด็กหอบหืดรุนแรงให้เกิด Bronchospasm เฉียบพลันจนคนไข้หายใจไม่ออก เป็นข้อควรระวังหลัก</p>`;
             } else if (subpath === 'B2') {
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
                 feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ปรับใช้ทางเลือกที่ปลอดภัย!</strong> <p>การเปลี่ยนทางเลือกมาสู่เทคนิคแปรงแห้งแบบจำกัดปริมาณ ช่วยเสริมฟลูออไรด์เฉพาะที่โดยไร้แรงระคายเคืองกระตุ้นอาการหอบหืด</p>`;
@@ -1395,16 +1329,16 @@
             evaluateStage1Progress();
         }
 
-        // Case 2 คุณตาชลลธี
+        // Case 2
         function selectCase2Path(path) {
             playSound('click');
             appState.c2_selected_path = path;
             
-            document.getElementById('btn-c2-path-C').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white";
-            document.getElementById('btn-c2-path-D').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white";
+            document.getElementById('btn-c2-path-C').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
+            document.getElementById('btn-c2-path-D').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
 
             const selectedBtn = document.getElementById(`btn-c2-path-${path}`);
-            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition focus:outline-none bg-indigo-50/10";
+            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
 
             const subContainer = document.getElementById('c2-round2-container');
             const subpathsDiv = document.getElementById('c2-subpaths');
@@ -1412,22 +1346,22 @@
 
             if (path === 'C') {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase2Subpath('C1')" id="btn-c2-sub-C1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase2Subpath('C1')" id="btn-c2-sub-C1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง C1</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">ทาเจลกรดให้ทั่วช่องปากรวมถึงขอบครอบฟันเซรามิก</span>
                     </button>
-                    <button onclick="selectCase2Subpath('C2')" id="btn-c2-sub-C2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase2Subpath('C2')" id="btn-c2-sub-C2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง C2</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">ปรับใช้สาร 38% SDF ทาเคลือบระงับผิวรากฟันผุเฉพาะจุด</span>
                     </button>
                 `;
             } else {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase2Subpath('D1')" id="btn-c2-sub-D1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase2Subpath('D1')" id="btn-c2-sub-D1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง D1</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">บ่มเจล NaF หนาแน่นแบบใส่ล้นถาดพิมพ์ฟัน</span>
                     </button>
-                    <button onclick="selectCase2Subpath('D2')" id="btn-c2-sub-D2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase2Subpath('D2')" id="btn-c2-sub-D2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง D2</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">ใช้พู่กันจิ๋ว (Microbrush) บรรจงแต้มทาควบคุมปริมาตร</span>
                     </button>
@@ -1442,11 +1376,11 @@
             
             ['C1', 'C2', 'D1', 'D2'].forEach(s => {
                 const el = document.getElementById(`btn-c2-sub-${s}`);
-                if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition focus:outline-none";
+                if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition";
             });
 
             const activeBtn = document.getElementById(`btn-c2-sub-${subpath}`);
-            activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/10 transition focus:outline-none";
+            if (activeBtn) activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
 
             const feedbackDiv = document.getElementById('c2-feedback');
             feedbackDiv.classList.remove('hidden');
@@ -1467,16 +1401,16 @@
             evaluateStage1Progress();
         }
 
-        // Case 3 น้องสิงโต
+        // Case 3
         function selectCase3Path(path) {
             playSound('click');
             appState.c3_selected_path = path;
             
-            document.getElementById('btn-c3-path-E').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white";
-            document.getElementById('btn-c3-path-F').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white";
+            document.getElementById('btn-c3-path-E').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
+            document.getElementById('btn-c3-path-F').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
 
             const selectedBtn = document.getElementById(`btn-c3-path-${path}`);
-            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition focus:outline-none bg-indigo-50/10";
+            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
 
             const subContainer = document.getElementById('c3-round2-container');
             const subpathsDiv = document.getElementById('c3-subpaths');
@@ -1484,24 +1418,24 @@
 
             if (path === 'E') {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase3Subpath('E1')" id="btn-c3-sub-E1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase3Subpath('E1')" id="btn-c3-sub-E1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง E1</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">ยืนยันจ่ายยาเม็ดเพื่อเร่งผลโครงสร้างกระดูกและหน่อฟันหน้าแท้</span>
                     </button>
-                    <button onclick="selectCase3Subpath('E2')" id="btn-c3-sub-E2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase3Subpath('E2')" id="btn-c3-sub-E2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง E2</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">ตรวจเกณฑ์ปี 2560 และสลับแนวทางมางดจ่ายเสริม</span>
                     </button>
                 `;
             } else {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase3Subpath('F1')" id="btn-c3-sub-F1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase3Subpath('F1')" id="btn-c3-sub-F1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง F1</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">แนะนำผู้ปกครองบีบยาสีฟันขนาดเมล็ดข้าวโพด</span>
                     </button>
-                    <button onclick="selectCase3Subpath('F2')" id="btn-c3-sub-F2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase3Subpath('F2')" id="btn-c3-sub-F2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง F2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">บีบปริมาณแตะพอเปียก (Smear Layer) และขจัดฟองส่วนเกินออก</span>
+                        <span class="text-[11px] text-slate-700 mt-0.5">บีบปริมาณแตะพอเปียก (Smear Layer) และคัดขจัดฟองส่วนเกินออก</span>
                     </button>
                 `;
             }
@@ -1514,11 +1448,11 @@
             
             ['E1', 'E2', 'F1', 'F2'].forEach(s => {
                 const el = document.getElementById(`btn-c3-sub-${s}`);
-                if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition focus:outline-none";
+                if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition";
             });
 
             const activeBtn = document.getElementById(`btn-c3-sub-${subpath}`);
-            activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/10 transition focus:outline-none";
+            if (activeBtn) activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
 
             const feedbackDiv = document.getElementById('c3-feedback');
             feedbackDiv.classList.remove('hidden');
@@ -1539,16 +1473,16 @@
             evaluateStage1Progress();
         }
 
-        // Case 4 คุณป้ามาลี
+        // Case 4
         function selectCase4Path(path) {
             playSound('click');
             appState.c4_selected_path = path;
             
-            document.getElementById('btn-c4-path-G').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white";
-            document.getElementById('btn-c4-path-H').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition focus:outline-none bg-white";
+            document.getElementById('btn-c4-path-G').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
+            document.getElementById('btn-c4-path-H').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
 
             const selectedBtn = document.getElementById(`btn-c4-path-${path}`);
-            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition focus:outline-none bg-indigo-50/10";
+            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
 
             const subContainer = document.getElementById('c4-round2-container');
             const subpathsDiv = document.getElementById('c4-subpaths');
@@ -1556,22 +1490,22 @@
 
             if (path === 'G') {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase4Subpath('G1')" id="btn-c4-sub-G1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase4Subpath('G1')" id="btn-c4-sub-G1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง G1</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">บ่มเจลกรดทิ้งไว้ 4 นาทีหวังผลตกผลึกผิวรากฟันผุอย่างรวดเร็ว</span>
                     </button>
-                    <button onclick="selectCase4Subpath('G2')" id="btn-c4-sub-G2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase4Subpath('G2')" id="btn-c4-sub-G2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง G2</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">ระงับแนวทางเจลกรดเนื่องจากคนไข้เสียวฟันและผิวเนื้อฟันไวต่อสภาวะกรดจัด</span>
                     </button>
                 `;
             } else {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase4Subpath('H1')" id="btn-c4-sub-H1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase4Subpath('H1')" id="btn-c4-sub-H1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง H1</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">ทาวาร์นิช 5% NaF บริเวณเหงือกร่นเสียว และสอนวิธีการงดแปรงฟัน 1 คืน</span>
                     </button>
-                    <button onclick="selectCase4Subpath('H2')" id="btn-c4-sub-H2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition focus:outline-none">
+                    <button onclick="selectCase4Subpath('H2')" id="btn-c4-sub-H2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
                         <span class="font-bold text-[10px] text-indigo-600">เส้นทาง H2</span>
                         <span class="text-[11px] text-slate-700 mt-0.5">แนะนำให้ทายาสีฟันสมุนไพรลดเสียวฟันที่ไม่มีฟลูออไรด์</span>
                     </button>
@@ -1586,11 +1520,11 @@
             
             ['G1', 'G2', 'H1', 'H2'].forEach(s => {
                 const el = document.getElementById(`btn-c4-sub-${s}`);
-                if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition focus:outline-none";
+                if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition";
             });
 
             const activeBtn = document.getElementById(`btn-c4-sub-${subpath}`);
-            activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/10 transition focus:outline-none";
+            if (activeBtn) activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
 
             const feedbackDiv = document.getElementById('c4-feedback');
             feedbackDiv.classList.remove('hidden');
@@ -1614,7 +1548,7 @@
         function evaluateStage1Progress() {
             if (appState.c1_selected_subpath && appState.c2_selected_subpath && appState.c3_selected_subpath && appState.c4_selected_subpath) {
                 appState.unlockedStages['stage2'] = true;
-                document.getElementById('stage1-progress-lbl').innerText = "🎉 ผ่านด่านวิเคราะห์แผนผังรักษาเรียบร้อยแล้ว! สามารถคลิกเพื่อไปด่านถัดไป";
+                document.getElementById('stage1-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>ผ่านการวิเคราะห์ด่านที่ 1 ครบถ้วน!</strong> สามารถคลิกปุ่มสีเขียวด้านขวาเพื่อเข้าสู่ด่านถัดไปครับ";
                 document.getElementById('btn-next-stage1').classList.remove('hidden');
                 document.getElementById('btn-next-stage1').classList.add('flex');
             }
@@ -1632,10 +1566,10 @@
             const isStatusCorrect = status === 'safe';
 
             if (isMassCorrect && isFionCorrect && isPtdCorrect && isStatusCorrect) {
-                showNotification("คดีที่ 1 คำนวณถูกต้อง! มวลเจล 4.8g ไอออน F⁻ 59.04mg ซึ่งยังไม่เกินขีดอันตราย PTD 100mg");
+                showNotification("คดีที่ 1 ถูกต้อง! มวลเจล 4.8g ไอออน F⁻ 59.04mg ยังไม่เกินขีด PTD 100mg");
                 evaluateStage2Progress();
             } else {
-                showNotification("คดีที่ 1 ผลลัพธ์ยังไม่ถูกต้อง ลองคำนวณใหม่ มวล = 4 * 1.2, F⁻ = มวล * 12.3, PTD = 5 * 20", "fail");
+                showNotification("คดีที่ 1 ยังคำนวณไม่ถูกต้อง ทบทวน: มวล = 4 * 1.2, F⁻ = มวล * 12.3, PTD = 5 * 20", "fail");
             }
         }
 
@@ -1651,10 +1585,10 @@
             const isStatusCorrect = status === 'safe';
 
             if (isNafCorrect && isFionCorrect && isPtdCorrect && isStatusCorrect) {
-                showNotification("คดีที่ 2 คำนวณถูกต้อง! NaF ในหลอดคือ 110mg ไอออน F⁻ จริง 49.5mg ยังไม่เกินขีดอันตราย PTD 60mg");
+                showNotification("คดีที่ 2 ถูกต้อง! NaF ในหลอดคือ 110mg ไอออน F⁻ จริง 49.5mg ยังไม่เกินขีด PTD 60mg");
                 evaluateStage2Progress();
             } else {
-                showNotification("คดีที่ 2 ผลลัพธ์ยังไม่ถูกต้อง ลองทบทวนสูตรคำนวณจากคลังความรู้ดูครับ", "fail");
+                showNotification("คดีที่ 2 ยังคำนวณไม่ถูกต้อง ทบทวนสูตรจากคลังความรู้ซ้ายมือนะครับ", "fail");
             }
         }
 
@@ -1664,17 +1598,16 @@
             const ptd = parseFloat(document.getElementById('calc-c3-ptd').value);
             const status = document.getElementById('calc-c3-status').value;
 
-            // Target calculation: 150ml * 0.05% NaF = 0.075g NaF = 75 mg NaF. F-ion = 75 * 45% = 33.75 mg F-. PTD = 5 * 25 = 125 mg. Status = safe.
             const isNafCorrect = Math.abs(nafmass - 75) < 1.0;
             const isFionCorrect = Math.abs(fion - 33.75) < 1.0;
             const isPtdCorrect = Math.abs(ptd - 125) < 0.1;
             const isStatusCorrect = status === 'safe';
 
             if (isNafCorrect && isFionCorrect && isPtdCorrect && isStatusCorrect) {
-                showNotification("คดีที่ 3 คำนวณถูกต้อง! NaF รวมคือ 75mg ไอออน F⁻ สุทธิ 33.75mg ซึ่งยังห่างไกลขีดอันตราย PTD 125mg ปลอดภัยดี");
+                showNotification("คดีที่ 3 ถูกต้อง! NaF รวมคือ 75mg ไอออน F⁻ สุทธิ 33.75mg ห่างไกลขีดอันตราย PTD 125mg");
                 evaluateStage2Progress();
             } else {
-                showNotification("คดีที่ 3 คำนวณยังไม่ถูกต้อง ลองตรวจสอบ: 150ml x 0.05% NaF = 75mg NaF", "fail");
+                showNotification("คดีที่ 3 ยังไม่ถูกต้อง ตรวจสอบ: 150ml x 0.05% NaF = 75mg NaF", "fail");
             }
         }
 
@@ -1683,41 +1616,38 @@
             const ptd = parseFloat(document.getElementById('calc-c4-ptd').value);
             const status = document.getElementById('calc-c4-status').value;
 
-            // Target calculation: 40 tablets * 0.5 mg = 20 mg F-ion. PTD = 5 * 15 = 75 mg. Status = safe (20 < 75).
             const isFionCorrect = Math.abs(fion - 20) < 0.1;
             const isPtdCorrect = Math.abs(ptd - 75) < 0.1;
             const isStatusCorrect = status === 'safe';
 
             if (isFionCorrect && isPtdCorrect && isStatusCorrect) {
-                showNotification("คดีที่ 4 คำนวณถูกต้อง! ไอออน F⁻ รวม 20mg น้อยกว่าระดับ PTD 75mg ปลอดภัยดีแต่แนะนำดื่มนมวัวเพื่อความปลอดภัย");
+                showNotification("คดีที่ 4 ถูกต้อง! ไอออน F⁻ รวม 20mg น้อยกว่าขีดอันตราย PTD 75mg ปลอดภัยดี");
                 evaluateStage2Progress();
             } else {
-                showNotification("คดีที่ 4 คำนวณยังไม่ถูกต้อง: เม็ดเสริมรวมมวลคือ 40เม็ด x 0.5mg = 20mg", "fail");
+                showNotification("คดีที่ 4 ยังไม่ถูกต้อง: เม็ดเสริมรวมมวลคือ 40 เม็ด x 0.5 mg = 20 mg", "fail");
             }
         }
 
         function evaluateStage2Progress() {
-            // Get inputs safely
-            const c1_mass = parseFloat(document.getElementById('calc-c1-mass').value);
-            const c1_fion = parseFloat(document.getElementById('calc-c1-fion').value);
-            const c1_ptd = parseFloat(document.getElementById('calc-c1-ptd').value);
+            const c1_mass = parseFloat(document.getElementById('calc-c1-mass').value) || 0;
+            const c1_fion = parseFloat(document.getElementById('calc-c1-fion').value) || 0;
+            const c1_ptd = parseFloat(document.getElementById('calc-c1-ptd').value) || 0;
             const c1_status = document.getElementById('calc-c1-status').value;
 
-            const c2_naf = parseFloat(document.getElementById('calc-c2-nafmass').value);
-            const c2_fion = parseFloat(document.getElementById('calc-c2-fion').value);
-            const c2_ptd = parseFloat(document.getElementById('calc-c2-ptd').value);
+            const c2_naf = parseFloat(document.getElementById('calc-c2-nafmass').value) || 0;
+            const c2_fion = parseFloat(document.getElementById('calc-c2-fion').value) || 0;
+            const c2_ptd = parseFloat(document.getElementById('calc-c2-ptd').value) || 0;
             const c2_status = document.getElementById('calc-c2-status').value;
 
-            const c3_naf = parseFloat(document.getElementById('calc-c3-nafmass').value);
-            const c3_fion = parseFloat(document.getElementById('calc-c3-fion').value);
-            const c3_ptd = parseFloat(document.getElementById('calc-c3-ptd').value);
+            const c3_naf = parseFloat(document.getElementById('calc-c3-nafmass').value) || 0;
+            const c3_fion = parseFloat(document.getElementById('calc-c3-fion').value) || 0;
+            const c3_ptd = parseFloat(document.getElementById('calc-c3-ptd').value) || 0;
             const c3_status = document.getElementById('calc-c3-status').value;
 
-            const c4_fion = parseFloat(document.getElementById('calc-c4-fion').value);
-            const c4_ptd = parseFloat(document.getElementById('calc-c4-ptd').value);
+            const c4_fion = parseFloat(document.getElementById('calc-c4-fion').value) || 0;
+            const c4_ptd = parseFloat(document.getElementById('calc-c4-ptd').value) || 0;
             const c4_status = document.getElementById('calc-c4-status').value;
 
-            // Strict checking to unlock next stage
             const isC1Valid = Math.abs(c1_mass - 4.8) < 0.1 && Math.abs(c1_fion - 59.04) < 0.2 && Math.abs(c1_ptd - 100) < 0.1 && c1_status === 'safe';
             const isC2Valid = Math.abs(c2_naf - 110) < 1.0 && Math.abs(c2_fion - 49.5) < 1.0 && Math.abs(c2_ptd - 60) < 0.1 && c2_status === 'safe';
             const isC3Valid = Math.abs(c3_naf - 75) < 1.0 && Math.abs(c3_fion - 33.75) < 1.0 && Math.abs(c3_ptd - 125) < 0.1 && c3_status === 'safe';
@@ -1725,7 +1655,7 @@
 
             if (isC1Valid && isC2Valid && isC3Valid && isC4Valid) {
                 appState.unlockedStages['stage3'] = true;
-                document.getElementById('stage2-progress-lbl').innerText = "🎉 ยอดเยี่ยมมากสายสืบเคมี! ปลดล็อกด่านที่ 3 สำเร็จแล้ว";
+                document.getElementById('stage2-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>วิเคราะห์ตรวจสอบคดีพิษวิทยาถูกต้องครบถ้วน!</strong> ปลดล็อกด่านที่ 3 สำเร็จแล้ว";
                 document.getElementById('btn-next-stage2').classList.remove('hidden');
                 document.getElementById('btn-next-stage2').classList.add('flex');
             }
@@ -1734,11 +1664,11 @@
         function validateMilkMission() {
             const ppm = parseFloat(document.getElementById('milk-ppm').value);
             if (Math.abs(ppm - 2.5) < 0.05) {
-                showNotification("ภารกิจที่ 3.1 ถูกต้อง! ความเข้มข้นควรคุมไว้ที่ 2.5 ppm เพื่อมอบ F⁻ 0.5 mg ต่อปริมาตร 200 ml");
+                showNotification("ภารกิจที่ 3.1 ถูกต้อง! ความเข้มข้นควรคุมไว้ที่ 2.5 ppm เพื่อมอบ F⁻ 0.5 mg ต่อ 200 ml");
                 appState.answers.milk_ppm_verified = true;
                 evaluateStage3Progress();
             } else {
-                showNotification("ภารกิจที่ 3.1 ผลลัพธ์ยังไม่ถูกต้อง: 0.5 mg สสารในน้ำปริมาตร 0.2 ลิตร มีความเข้มข้นกี่ ppm?", "fail");
+                showNotification("ภารกิจที่ 3.1 คำนวณผิดพลาด ทบทวน: 0.5 mg สารในน้ำนม 0.2 ลิตร คือกี่ ppm?", "fail");
             }
         }
 
@@ -1752,7 +1682,7 @@
                 appState.answers.dry_brush_rules_verified = true;
                 evaluateStage3Progress();
             } else {
-                showNotification("กรุณากรอกนโยบายแปรงฟันแห้งให้ครบถ้วนทั้ง 3 ข้อเพื่อสวัสดิภาพนักเรียน", "fail");
+                showNotification("กรุณากรอกนโยบายให้ครบถ้วนทั้ง 3 ข้อเพื่อความปลอดภัยของเด็กนะครับ", "fail");
             }
         }
 
@@ -1763,11 +1693,11 @@
                 return;
             }
             if (chosen.value === 'ro') {
-                showNotification("ภารกิจที่ 3.3 ถูกต้อง! การกรอง RO ช่วยลดสารฟลูออไรด์สะสมตามธรรมชาติเกินขีดมาตรฐาน");
+                showNotification("ภารกิจที่ 3.3 ถูกต้อง! การกรอง RO ช่วยลดความเสี่ยงฟันตกกระ (Fluorosis) ได้มีประสิทธิภาพสูงสุด");
                 appState.answers.mission33_verified = true;
                 evaluateStage3Progress();
             } else {
-                showNotification("ภารกิจที่ 3.3 ยังไม่ถูกต้อง: หากฟลูออไรด์ในน้ำดื่มสูงเกิน 1.8 ppm การจ่ายยาเม็ดเพิ่มจะทำให้ด่างขาวตกกระยิ่งลุกลาม", "fail");
+                showNotification("ภารกิจที่ 3.3 ยังไม่ถูกต้อง: การจ่ายยาเม็ดเสริมขณะที่น้ำมีฟลูออไรด์ 1.8 ppm จะยิ่งเร่งฟันตกกระ", "fail");
             }
         }
 
@@ -1778,18 +1708,18 @@
                 return;
             }
             if (chosen.value === 'varnish') {
-                showNotification("ภารกิจที่ 3.4 ถูกต้อง! NaF Varnish มีความปลอดภัยสูงที่สุดและคุมปริมาณกลืนได้เฉียบขาด");
+                showNotification("ภารกิจที่ 3.4 ถูกต้อง! NaF Varnish มีความปลอดภัยสูงที่สุดและควบคุมกลืนได้ง่ายและดีกว่าเจล");
                 appState.answers.mission34_verified = true;
                 evaluateStage3Progress();
             } else {
-                showNotification("ภารกิจที่ 3.4 ยังไม่ถูกต้อง: หลีกเลี่ยงเจล APF ในค่ายชุมชนเด็กปฐมวัยเพราะเผลอกลืนได้ง่ายและคุมไม่ได้", "fail");
+                showNotification("ภารกิจที่ 3.4 ยังไม่ถูกต้อง: หลีกเลี่ยง APF Gel ในกลุ่มเด็กปฐมวัยเคลื่อนที่เนื่องจากคุมปริมาณกลืนไม่ได้", "fail");
             }
         }
 
         function evaluateStage3Progress() {
             if (appState.answers.milk_ppm_verified && appState.answers.dry_brush_rules_verified && appState.answers.mission33_verified && appState.answers.mission34_verified) {
                 appState.unlockedStages['stage4'] = true;
-                document.getElementById('stage3-progress-lbl').innerText = "🎉 ผ่านการทดสอบนโยบายทันตสาธารณสุขชุมชนเรียบร้อย! คลิกไปด่านถัดไปได้ทันที";
+                document.getElementById('stage3-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>วางแผนทันตสาธารณสุขชุมชนถูกต้องครบถ้วน!</strong> ปลดล็อกด่านที่ 4 สำเร็จแล้ว";
                 document.getElementById('btn-next-stage3').classList.remove('hidden');
                 document.getElementById('btn-next-stage3').classList.add('flex');
             }
@@ -1816,14 +1746,14 @@
             );
 
             if (isCorrect) {
-                showNotification("ยอดเยี่ยมมาก! คุณอธิบายรายละเอียดเคมีระดับโมเลกุลได้สมบูรณ์แบบ ปลดล็อกด่านปรนัยที่ 5 แล้ว");
+                showNotification("ยอดเยี่ยมมาก! อธิบายรายละเอียดชีวเคมีและกลไกระดับเซลล์ได้ถูกต้อง ปลดล็อกด่านสุดท้ายสำเร็จ");
                 appState.answers.molecular_match_verified = true;
                 appState.unlockedStages['stage5'] = true;
-                document.getElementById('stage4-progress-lbl').innerText = "🎉 บรรลุด่านกลไกชีวเคมีระดับโมเลกุลแล้ว! เชิญไปพิชิตข้อสอบคัดสรรต่อได้";
+                document.getElementById('stage4-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>ปลดล็อกสำเร็จ!</strong> คุณอธิบายกลไกได้ครบถ้วนแล้ว คลิกไปลุยด่าน 5 ได้เลยครับ";
                 document.getElementById('btn-next-stage4').classList.remove('hidden');
                 document.getElementById('btn-next-stage4').classList.add('flex');
             } else {
-                showNotification("ยังมีช่องกลไกที่จำแนกผิดพลาด ลองประเมินผลตกตะกอน CaF2 และ 銀 (Silver) ใน SDF อีกครั้งนะครับ", "fail");
+                showNotification("ยังมีช่องกลไกจำแนกผิดพลาด ตรวจสอบประเด็นผลตกตะกอน CaF2 และ 銀 (Silver) ใน SDF อีกครั้งนะครับ", "fail");
             }
         }
 
@@ -1899,21 +1829,21 @@
             });
 
             if (answeredCount < mcqDatabase.length) {
-                showNotification("กรุณาตอบคำถามข้อสอบปรนัยให้ครบ 10 ข้อก่อนส่งการประเมินครับ", "fail");
+                showNotification("กรุณาทำข้อสอบให้ครบทั้ง 10 ข้อก่อนกดปุ่มเสร็จสิ้นส่งผลงานนะครับ", "fail");
                 return;
             }
 
             document.getElementById('quiz-score-badge').classList.remove('hidden');
             document.getElementById('quiz-score-val').innerText = score;
 
-            // Load final Certificate details with new Public Health Persona
             document.getElementById('cert-student-name').innerText = "ทันตสาธารณสุขผู้มุ่งมั่น";
             document.getElementById('cert-score').innerText = `${score}/10`;
             const today = new Date();
             document.getElementById('cert-date').innerText = today.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
 
             appState.unlockedStages['cert'] = true;
-            showNotification(`ทำแบบทดสอบเสร็จสมบูรณ์! ได้รับคะแนนสะสม ${score}/10 คะแนน`);
+            showNotification(`เสร็จสิ้นกิจกรรม! ส่งคำตอบเสร็จสมบูรณ์ ได้คะแนน ${score}/10 คะแนน`);
+            
             setTimeout(() => {
                 switchStage('cert');
             }, 1500);
