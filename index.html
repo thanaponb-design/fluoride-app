@@ -54,9 +54,12 @@
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
                     <i class="fa-solid fa-tooth text-lg animate-pulse"></i>
                 </div>
-                <div>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                     <h1 class="font-bold text-slate-900 leading-tight tracking-tight text-sm sm:text-base">ทันตสาธารณสุขฟลูออไรด์สเปซ</h1>
-                    <p class="text-xs text-slate-500 hidden sm:block">โปรแกรมจำลองชีวเคมีและการตัดสินใจทางคลินิกป้องกัน</p>
+                    <div class="flex items-center gap-2">
+                        <p class="text-[11px] sm:text-xs text-slate-500 hidden sm:block">โปรแกรมจำลองชีวเคมีและการตัดสินใจทางคลินิกป้องกัน</p>
+                        <span class="text-[11px] sm:text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200 shadow-sm">คะแนนสะสม: <span id="header-score" class="text-indigo-900">0</span>/100</span>
+                    </div>
                 </div>
             </div>
             
@@ -71,7 +74,7 @@
                 </span>
 
                 <button id="btn-toggle-editor" onclick="toggleMainMode()" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-eye"></i> สลับเป็นพรีวิวผู้เล่น
+                    <i class="fa-solid fa-wrench"></i> สลับเป็นโหมดผู้สร้าง
                 </button>
             </div>
         </div>
@@ -89,6 +92,11 @@
                     <i id="cheatsheet-chevron" class="fa-solid fa-chevron-down text-slate-400 group-hover:text-slate-600 transition"></i>
                 </button>
                 <div id="cheatsheet-content" class="p-5 flex-1 overflow-y-auto custom-scrollbar space-y-4 text-xs leading-relaxed">
+                    <div class="bg-rose-50 border border-rose-100 rounded-lg p-2.5 mb-2">
+                        <p class="font-bold text-rose-700 flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> กติกาการให้คะแนน</p>
+                        <p class="text-rose-600 mt-1">• <b>จำกัดการตอบ 3 ครั้ง</b> ในทุกๆ ภารกิจ</p>
+                        <p class="text-rose-600">• สะสมคะแนนจาก 5 ด่าน เพื่อวัด 5 ระดับความเชี่ยวชาญท้ายเกม!</p>
+                    </div>
                     <div>
                         <h4 class="font-bold text-indigo-900 border-b border-slate-100 pb-1 mb-1.5 flex items-center gap-1">
                             <i class="fa-solid fa-calculator"></i> สูตรแปลงหน่วย
@@ -177,7 +185,7 @@
                         </div>
                         <h2 class="text-xl sm:text-2xl font-bold text-slate-900 leading-tight">ดินแดนฟลูออไรด์และทันตกรรมป้องกัน</h2>
                         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
-                            ขอต้อนรับเข้าสู่สมุดแบบฝึกหัดปฏิสัมพันธ์ คุณจะได้รับบทบาทเป็น <span class="font-semibold text-indigo-600">ทันตสาธารณสุข</span> ร่วมจำลองการตัดสินใจทางระบาดวิทยา การสืบสวนค่าพิษ และการตอบข้อสอบ 5 ด่านสำคัญ!
+                            ขอต้อนรับเข้าสู่สมุดแบบฝึกหัดปฏิสัมพันธ์ คุณจะได้รับบทบาทเป็น <span class="font-semibold text-indigo-600">ทันตสาธารณสุข</span> ร่วมจำลองการตัดสินใจทางระบาดวิทยา การสืบสวนค่าพิษ และการตอบข้อสอบ 5 ด่านสำคัญ! (สะสมคะแนนรวม 100 คะแนน)
                         </p>
                         <div class="pt-2">
                             <button onclick="startPlaying()" class="bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-2xl text-sm sm:text-base transition duration-300 transform hover:scale-105 shadow-xl shadow-indigo-600/25 inline-flex items-center gap-2.5">
@@ -188,40 +196,74 @@
 
                     <!-- Stage Progress Cards Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-                        <div onclick="trySwitchStage('stage1')" class="border border-slate-200 hover:border-indigo-500 rounded-2xl p-5 hover:shadow-md transition cursor-pointer flex gap-4 items-start group">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <i class="fa-solid fa-network-wired"></i>
+                        <div id="card-stage1" onclick="trySwitchStage('stage1')" class="border border-slate-200 rounded-2xl p-5 transition relative overflow-hidden group">
+                            <div class="flex gap-4 items-start relative z-10">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition">
+                                    <i class="fa-solid fa-network-wired"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-sm text-slate-900">ด่านที่ 1: Clinical Decision Tree (20 Pts)</h3>
+                                    <p class="text-xs text-slate-500 mt-1">เผชิญ 4 กรณีคนไข้จำลองแบบเป็นกลาง สั่งทรีตเมนต์เฉพาะบุคคลโดยไม่โดนหลอก</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="font-bold text-sm text-slate-900">ด่านที่ 1: Clinical Decision Tree</h3>
-                                <p class="text-xs text-slate-500 mt-1">เผชิญ 4 กรณีคนไข้จำลองแบบเป็นกลาง สั่งทรีตเมนต์เฉพาะบุคคลโดยไม่โดนหลอก</p>
-                            </div>
-                        </div>
-                        <div onclick="trySwitchStage('stage2')" class="border border-slate-200 hover:border-teal-500 rounded-2xl p-5 hover:shadow-md transition cursor-pointer flex gap-4 items-start group">
-                            <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
-                                <i class="fa-solid fa-shield-heart"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-sm text-slate-900">ด่านที่ 2: Safety Detective</h3>
-                                <p class="text-xs text-slate-500 mt-1">วิเคราะห์คดีการกลืนฟลูออไรด์ 4 รูปแบบคำนวณสรีระของคนไข้เด็ก</p>
+                            <div id="lock-overlay-stage1" class="absolute inset-0 bg-slate-50/80 backdrop-blur-[1px] flex items-center justify-center hidden z-20">
+                                <div class="bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-200 text-slate-600 text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-lock text-rose-500"></i> ล็อคอยู่</div>
                             </div>
                         </div>
-                        <div onclick="trySwitchStage('stage3')" class="border border-slate-200 hover:border-emerald-500 rounded-2xl p-5 hover:shadow-md transition cursor-pointer flex gap-4 items-start group">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-emerald-500 group-hover:text-white transition">
-                                <i class="fa-solid fa-hospital-user"></i>
+                        <div id="card-stage2" onclick="trySwitchStage('stage2')" class="border border-slate-200 rounded-2xl p-5 transition relative overflow-hidden group">
+                            <div class="flex gap-4 items-start relative z-10">
+                                <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
+                                    <i class="fa-solid fa-shield-heart"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-sm text-slate-900">ด่านที่ 2: Safety Detective (20 Pts)</h3>
+                                    <p class="text-xs text-slate-500 mt-1">วิเคราะห์คดีการกลืนฟลูออไรด์ 4 รูปแบบคำนวณสรีระของคนไข้เด็ก</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="font-bold text-sm text-slate-900">ด่านที่ 3: Public Health Designer</h3>
-                                <p class="text-xs text-slate-500 mt-1">ควบคุมระบาดวิทยานมโรงเรียน บัญญัติการแปรงฟันแห้ง และการคัดกรองพื้นที่</p>
+                            <div id="lock-overlay-stage2" class="absolute inset-0 bg-slate-50/80 backdrop-blur-[1px] flex items-center justify-center hidden z-20">
+                                <div class="bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-200 text-slate-600 text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-lock text-rose-500"></i> ล็อคอยู่ (ต้องผ่านด่าน 1 ก่อน)</div>
                             </div>
                         </div>
-                        <div onclick="trySwitchStage('stage4')" class="border border-slate-200 hover:border-purple-500 rounded-2xl p-5 hover:shadow-md transition cursor-pointer flex gap-4 items-start group">
-                            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 group-hover:bg-purple-600 group-hover:text-white transition">
-                                <i class="fa-solid fa-dna"></i>
+                        <div id="card-stage3" onclick="trySwitchStage('stage3')" class="border border-slate-200 rounded-2xl p-5 transition relative overflow-hidden group">
+                            <div class="flex gap-4 items-start relative z-10">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-emerald-500 group-hover:text-white transition">
+                                    <i class="fa-solid fa-hospital-user"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-sm text-slate-900">ด่านที่ 3: Public Health Designer (20 Pts)</h3>
+                                    <p class="text-xs text-slate-500 mt-1">ควบคุมระบาดวิทยานมโรงเรียน บัญญัติการแปรงฟันแห้ง และการคัดกรองพื้นที่</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="font-bold text-sm text-slate-900">ด่านที่ 4: Molecular Mechanism</h3>
-                                <p class="text-xs text-slate-500 mt-1">จับคู่กลไกชีวเคมีระดับโมเลกุล การแลกเปลี่ยนไอออน และผลึกทนทานต่อกรด</p>
+                            <div id="lock-overlay-stage3" class="absolute inset-0 bg-slate-50/80 backdrop-blur-[1px] flex items-center justify-center hidden z-20">
+                                <div class="bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-200 text-slate-600 text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-lock text-rose-500"></i> ล็อคอยู่ (ต้องผ่านด่าน 2 ก่อน)</div>
+                            </div>
+                        </div>
+                        <div id="card-stage4" onclick="trySwitchStage('stage4')" class="border border-slate-200 rounded-2xl p-5 transition relative overflow-hidden group">
+                            <div class="flex gap-4 items-start relative z-10">
+                                <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 group-hover:bg-purple-600 group-hover:text-white transition">
+                                    <i class="fa-solid fa-dna"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-sm text-slate-900">ด่านที่ 4: Molecular Mechanism (10 Pts)</h3>
+                                    <p class="text-xs text-slate-500 mt-1">จับคู่กลไกชีวเคมีระดับโมเลกุล การแลกเปลี่ยนไอออน และผลึกทนทานต่อกรด</p>
+                                </div>
+                            </div>
+                            <div id="lock-overlay-stage4" class="absolute inset-0 bg-slate-50/80 backdrop-blur-[1px] flex items-center justify-center hidden z-20">
+                                <div class="bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-200 text-slate-600 text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-lock text-rose-500"></i> ล็อคอยู่ (ต้องผ่านด่าน 3 ก่อน)</div>
+                            </div>
+                        </div>
+                        <div id="card-stage5" onclick="trySwitchStage('stage5')" class="border border-slate-200 rounded-2xl p-5 transition relative overflow-hidden group md:col-span-2">
+                            <div class="flex gap-4 items-start relative z-10">
+                                <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 group-hover:bg-rose-600 group-hover:text-white transition">
+                                    <i class="fa-solid fa-circle-question"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-sm text-slate-900">ด่านที่ 5: 10 Premium MCQs (30 Pts)</h3>
+                                    <p class="text-xs text-slate-500 mt-1">บททดสอบปรนัยคัดสรร 10 ข้อ วัดผลสุดท้ายเพื่อรับใบประกาศ 5 ระดับความเชี่ยวชาญ!</p>
+                                </div>
+                            </div>
+                            <div id="lock-overlay-stage5" class="absolute inset-0 bg-slate-50/80 backdrop-blur-[1px] flex items-center justify-center hidden z-20">
+                                <div class="bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-200 text-slate-600 text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-lock text-rose-500"></i> ล็อคข้อสอบสุดท้าย (ต้องเคลียร์ 4 ด่านก่อน)</div>
                             </div>
                         </div>
                     </div>
@@ -229,12 +271,14 @@
 
                 <!-- STAGE 1: Clinical Decision Tree -->
                 <section id="section-stage1" class="hidden space-y-6">
-                    <div class="border-b border-slate-100 pb-3">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">ด่านที่ 1</span>
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-network-wired text-indigo-500"></i> Clinical Decision Tree (เส้นทางรักษาและป้องกันเพื่อทันตสาธารณสุข)
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-1">โจทย์ไม่มีสัญลักษณ์ชี้นำข้อถูก/ผิด คุณต้องตัดสินใจตามแนวทางคลินิกอย่างแม่นยำ</p>
+                    <div class="border-b border-slate-100 pb-3 flex justify-between items-end">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">ด่านที่ 1</span>
+                            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-network-wired text-indigo-500"></i> Clinical Decision Tree
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-1">วิเคราะห์เส้นทางรักษา 4 เคส (เคสละ 5 คะแนน) จำกัดการตอบ 3 ครั้ง/เคส</p>
+                        </div>
                     </div>
 
                     <!-- CASE 1 -->
@@ -363,7 +407,7 @@
 
                     <!-- Stage 1 Lock & Next Trigger -->
                     <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage1-progress-lbl">⚠️ กรุณาเลือกทิศทางตอบข้อวิเคราะห์ให้ครบถ้วนทั้ง 4 เคส เพื่อปลดล็อกปุ่มไปต่อด่านถัดไป</span>
+                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage1-progress-lbl">⚠️ กรุณาเลือกทิศทางตอบข้อวิเคราะห์ให้ถูกต้องหรือจนครบสิทธิ์ ทั้ง 4 เคส เพื่อไปต่อ</span>
                         <button id="btn-next-stage1" onclick="switchStage('stage2')" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-emerald-600/20 animate-fadeIn">
                             ไปต่อด่านที่ 2: นักสืบพิษวิทยา <i class="fa-solid fa-chevron-right"></i>
                         </button>
@@ -375,12 +419,13 @@
                     <div class="border-b border-slate-100 pb-3">
                         <span class="text-xs font-semibold uppercase tracking-wider text-teal-600">ด่านที่ 2</span>
                         <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-shield-heart text-teal-500"></i> The Fluoride Safety Detective (นักสืบคำนวณพิษวิทยาเพื่อความปลอดภัย)
+                            <i class="fa-solid fa-shield-heart text-teal-500"></i> The Fluoride Safety Detective
                         </h2>
+                        <p class="text-xs text-slate-500 mt-1">วิเคราะห์คดีการกลืนฟลูออไรด์ 4 คดี (คดีละ 5 คะแนน) จำกัดการตอบ 3 ครั้ง/คดี</p>
                     </div>
 
                     <!-- CASE 1 -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4 relative" id="s2c1-container">
                         <div class="bg-teal-500/10 border border-teal-500/10 rounded-xl p-4 text-xs leading-relaxed">
                             <h4 class="font-bold text-teal-900 mb-1 flex items-center gap-1.5">
                                 <i class="fa-solid fa-magnifying-glass"></i> เบาะแสคดีที่ 1: "กลืนเจลสยองขวัญ"
@@ -391,15 +436,15 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">1. มวลเนื้อเจลที่กลืน (g)</label>
-                                <input type="number" id="calc-c1-mass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 4.8" step="any">
+                                <input type="number" id="calc-c1-mass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 2.5" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">2. มวลไอออน F⁻ จริง (mg)</label>
-                                <input type="number" id="calc-c1-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 59.04" step="any">
+                                <input type="number" id="calc-c1-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 30.5" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">3. ค่า PTD วิกฤต (mg)</label>
-                                <input type="number" id="calc-c1-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 100" step="any">
+                                <input type="number" id="calc-c1-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 50" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">4. ประเมินสภาวะทางเคมี</label>
@@ -410,13 +455,13 @@
                                 </select>
                             </div>
                         </div>
-                        <button onclick="validateSafetyCase1()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
+                        <button onclick="validateSafetyCase1()" id="btn-s2c1" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
                             <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี 1
                         </button>
                     </div>
 
                     <!-- CASE 2 -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4" id="s2c2-container">
                         <div class="bg-indigo-500/10 border border-indigo-500/10 rounded-xl p-4 text-xs leading-relaxed">
                             <h4 class="font-bold text-indigo-900 mb-1 flex items-center gap-1.5">
                                 <i class="fa-solid fa-magnifying-glass"></i> เบาะแสคดีที่ 2: "พิษซ่อนรูปในยาสีฟัน"
@@ -427,15 +472,15 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">1. มวลสาร NaF ใน 50 g (mg)</label>
-                                <input type="number" id="calc-c2-nafmass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 110" step="any">
+                                <input type="number" id="calc-c2-nafmass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 50" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">2. มวลไอออน F⁻ จริง (mg)</label>
-                                <input type="number" id="calc-c2-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 49.5" step="any">
+                                <input type="number" id="calc-c2-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 22.5" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">3. ค่า PTD วิกฤต (mg)</label>
-                                <input type="number" id="calc-c2-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 60" step="any">
+                                <input type="number" id="calc-c2-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 40" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">4. ประเมินสภาวะทางเคมี</label>
@@ -446,13 +491,13 @@
                                 </select>
                             </div>
                         </div>
-                        <button onclick="validateSafetyCase2()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
+                        <button onclick="validateSafetyCase2()" id="btn-s2c2" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
                             <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี 2
                         </button>
                     </div>
 
                     <!-- CASE 3 -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4" id="s2c3-container">
                         <div class="bg-teal-500/10 border border-teal-500/10 rounded-xl p-4 text-xs leading-relaxed">
                             <h4 class="font-bold text-teal-900 mb-1 flex items-center gap-1.5">
                                 <i class="fa-solid fa-magnifying-glass"></i> เบาะแสคดีที่ 3: "น้ำยาบ้วนปากแสนหวาน"
@@ -463,15 +508,15 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">1. มวลสาร NaF ใน 150ml (mg)</label>
-                                <input type="number" id="calc-c3-nafmass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 75" step="any">
+                                <input type="number" id="calc-c3-nafmass" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 50" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">2. มวลไอออน F⁻ จริง (mg)</label>
-                                <input type="number" id="calc-c3-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 33.75" step="any">
+                                <input type="number" id="calc-c3-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 22.5" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">3. ค่า PTD วิกฤต (mg)</label>
-                                <input type="number" id="calc-c3-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 125" step="any">
+                                <input type="number" id="calc-c3-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 80" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">4. ประเมินสภาวะทางเคมี</label>
@@ -482,13 +527,13 @@
                                 </select>
                             </div>
                         </div>
-                        <button onclick="validateSafetyCase3()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
+                        <button onclick="validateSafetyCase3()" id="btn-s2c3" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
                             <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี 3
                         </button>
                     </div>
 
                     <!-- CASE 4 -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4" id="s2c4-container">
                         <div class="bg-indigo-500/10 border border-indigo-500/10 rounded-xl p-4 text-xs leading-relaxed">
                             <h4 class="font-bold text-indigo-900 mb-1 flex items-center gap-1.5">
                                 <i class="fa-solid fa-magnifying-glass"></i> เบาะแสคดีที่ 4: "ยาเม็ดเสริมของน้องอลิซ"
@@ -499,11 +544,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">1. มวลไอออน F⁻ รวมที่ได้รับ (mg)</label>
-                                <input type="number" id="calc-c4-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 20" step="any">
+                                <input type="number" id="calc-c4-fion" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 10" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">2. ค่า PTD วิกฤต (mg)</label>
-                                <input type="number" id="calc-c4-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 75" step="any">
+                                <input type="number" id="calc-c4-ptd" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500" placeholder="ตัวอย่าง: 50" step="any">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="text-[11px] font-bold text-slate-600 block">3. ประเมินสภาวะทางเคมี</label>
@@ -514,14 +559,14 @@
                                 </select>
                             </div>
                         </div>
-                        <button onclick="validateSafetyCase4()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
+                        <button onclick="validateSafetyCase4()" id="btn-s2c4" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1">
                             <i class="fa-solid fa-calculator"></i> วิเคราะห์ตรวจสอบผลคดี 4
                         </button>
                     </div>
 
                     <!-- Stage 2 Lock & Next Trigger -->
                     <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage2-progress-lbl">⚠️ กรุณาวิเคราะห์คำนวณเคมีคดีพิษวิทยาให้ถูกต้องครบถ้วนเพื่อเปิดปุ่มไปต่อด่านถัดไป</span>
+                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage2-progress-lbl">⚠️ กรุณาวิเคราะห์คำนวณเคมีให้ถูกต้องหรือจนครบสิทธิ์ เพื่อเปิดปุ่มไปต่อ</span>
                         <button id="btn-next-stage2" onclick="switchStage('stage3')" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-emerald-600/20 animate-fadeIn">
                             ไปต่อด่านที่ 3: นักวิจัยสาธารณสุข <i class="fa-solid fa-chevron-right"></i>
                         </button>
@@ -533,8 +578,9 @@
                     <div class="border-b border-slate-100 pb-3">
                         <span class="text-xs font-semibold uppercase tracking-wider text-emerald-600">ด่านที่ 3</span>
                         <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-hospital-user text-emerald-500"></i> Public Health Program Designer (เกมนวัตกรรมการวางแผนทันตสาธารณสุข)
+                            <i class="fa-solid fa-hospital-user text-emerald-500"></i> Public Health Program Designer
                         </h2>
+                        <p class="text-xs text-slate-500 mt-1">วิเคราะห์นวัตกรรมทันตสาธารณสุข 4 ภารกิจ (ภารกิจละ 5 คะแนน) จำกัดตอบ 3 ครั้ง/ภารกิจ</p>
                     </div>
 
                     <!-- Mission 3.1 -->
@@ -546,10 +592,10 @@
                             ต้องการจัดเตรียมน้ำนมโรงเรียนปริมาตร 200 ml บรรจุถุง โดยเด็กควรได้รับไอออนฟลูออไรด์ 0.5 mg ต่อวัน คุณจะต้องควบคุมสารละลายในน้ำนมโรงเรียนให้มีความเข้มข้นกี่ ppm?
                         </p>
                         <div class="flex items-center gap-2 max-w-xs">
-                            <input type="number" id="milk-ppm" class="p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500 flex-1" placeholder="ระบุตัวเลข... (คำตอบคือ 2.5)" step="any">
+                            <input type="number" id="milk-ppm" class="p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:ring-1 focus:ring-teal-500 flex-1" placeholder="ระบุตัวเลข... (ตัวอย่าง: 1.5)" step="any">
                             <span class="text-xs font-bold text-slate-500">ppm</span>
                         </div>
-                        <button onclick="validateMilkMission()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งคำตอบภารกิจ 3.1</button>
+                        <button onclick="validateMilkMission()" id="btn-s3m1" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งคำตอบภารกิจ 3.1</button>
                     </div>
 
                     <!-- Mission 3.2 -->
@@ -574,7 +620,7 @@
                                 <input type="text" id="dry-brush-rule-3" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none" placeholder="เช่น การควบคุมงดทานอาหาร 30 นาทีหลังแปรง...">
                             </div>
                         </div>
-                        <button onclick="validateDryBrushRules()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งคำประกาศภารกิจ 3.2</button>
+                        <button onclick="validateDryBrushRules()" id="btn-s3m2" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งคำประกาศภารกิจ 3.2</button>
                     </div>
 
                     <!-- Mission 3.3 -->
@@ -595,7 +641,7 @@
                                 <span>จัดตั้งติดตั้งระบบกรอง Reverse Osmosis (RO) หรือให้สลับดื่มน้ำขวดควบคุมระดับสารเคมี</span>
                             </label>
                         </div>
-                        <button onclick="validateMission33()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งแนวทางภารกิจ 3.3</button>
+                        <button onclick="validateMission33()" id="btn-s3m3" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งแนวทางภารกิจ 3.3</button>
                     </div>
 
                     <!-- Mission 3.4 -->
@@ -616,12 +662,12 @@
                                 <span>สารเคลือบฟัน 5% NaF Varnish ใช้หัวแปรงแตะบรรจงทาบางๆ ปลอดภัยจากการกลืน</span>
                             </label>
                         </div>
-                        <button onclick="validateMission34()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งแนวทางภารกิจ 3.4</button>
+                        <button onclick="validateMission34()" id="btn-s3m4" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">ส่งแนวทางภารกิจ 3.4</button>
                     </div>
 
                     <!-- Stage 3 Lock & Next Trigger -->
                     <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage3-progress-lbl">⚠️ กรุณาดำเนินภารกิจทันตสาธารณสุขชุมชนให้ครบถ้วนถูกต้องเพื่อเปิดปุ่มไปต่อด่านถัดไป</span>
+                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage3-progress-lbl">⚠️ กรุณาดำเนินภารกิจให้ถูกต้องหรือครบสิทธิ์ เพื่อไปต่อ</span>
                         <button id="btn-next-stage3" onclick="switchStage('stage4')" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-emerald-600/20 animate-fadeIn">
                             ไปต่อด่านที่ 4: กลไกโมเลกุล <i class="fa-solid fa-chevron-right"></i>
                         </button>
@@ -633,44 +679,53 @@
                     <div class="border-b border-slate-100 pb-3">
                         <span class="text-xs font-semibold uppercase tracking-wider text-purple-600">ด่านที่ 4</span>
                         <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-dna text-purple-500"></i> Molecular Mechanism Match (สมรภูมิกลไกชีวเคมีโมเลกุล)
+                            <i class="fa-solid fa-dna text-purple-500"></i> Molecular Mechanism Match
                         </h2>
+                        <p class="text-xs text-slate-500 mt-1">ไขความลับชีวเคมี 1 ภารกิจ (10 คะแนน) จำกัดการตอบ 3 ครั้ง</p>
                     </div>
 
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-5">
                         <p class="text-xs text-slate-600 leading-relaxed">
-                            จงเลือกสารเคมีและพารามิเตอร์ที่ถูกต้องเติมลงในช่องว่างเพื่ออธิบายกลไกโมเลกุล:
+                            จงเลือกสารเคมีและพารามิเตอร์ที่ถูกต้องเติมลงในช่องว่างเพื่ออธิบายกลไกโมเลกุล (เลือกจาก 4 ตัวเลือกให้ถูกต้อง):
                         </p>
 
                         <div class="space-y-4 text-xs leading-relaxed">
                             <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
                                 <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-teal-500"></i> กลไกการเกิดเกราะผลึกฟันใหม่</h4>
                                 <p>
-                                    1. ผลึกโครงสร้างธรรมชาติบนผิวฟันเรียกว่า 
+                                    1. ผลึกแร่ธาตุโครงสร้างธรรมชาติบนผิวฟันปกติ เรียกว่าอะไร?
                                     <select id="mol-crystal-1" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="ha">Hydroxyapatite</option>
-                                        <option value="fap">Fluoroapatite</option>
+                                        <option value="caf2">Calcium Fluoride (CaF2)</option>
+                                        <option value="ha">Hydroxyapatite (HA)</option>
+                                        <option value="chx">Chlorhexidine</option>
+                                        <option value="fap">Fluoroapatite (FAP)</option>
                                     </select> 
                                     มีค่า pH วิกฤตสลายตัวอยู่ที่ 
                                     <select id="mol-ph-1" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="5.5">5.5</option>
-                                        <option value="4.5">4.5</option>
+                                        <option value="7.0">pH 7.0 (เป็นกลาง)</option>
+                                        <option value="5.5">pH 5.5</option>
+                                        <option value="6.5">pH 6.5 (กรดอ่อน)</option>
+                                        <option value="4.5">pH 4.5</option>
                                     </select>
                                 </p>
                                 <p>
-                                    2. ผลึกชั้นเกราะความเสถียรทนกรดสูงกว่าชื่อว่า 
+                                    2. เมื่อได้รับฟลูออไรด์ จะเกิดผลึกชั้นเกราะใหม่ที่ทนกรดได้ดีกว่าเดิม ชื่อว่าอะไร?
                                     <select id="mol-crystal-2" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="ha">Hydroxyapatite</option>
-                                        <option value="fap">Fluoroapatite</option>
+                                        <option value="fap">Fluoroapatite (FAP)</option>
+                                        <option value="ha">Hydroxyapatite (HA)</option>
+                                        <option value="caf2">Calcium Fluoride (CaF2)</option>
+                                        <option value="chx">Chlorhexidine</option>
                                     </select> 
                                     มีค่า pH วิกฤตสลายแร่ธาตุลดต่ำลงเหลือเพียง 
                                     <select id="mol-ph-2" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="5.5">5.5</option>
-                                        <option value="4.5">4.5</option>
+                                        <option value="6.5">pH 6.5 (กรดอ่อน)</option>
+                                        <option value="4.5">pH 4.5</option>
+                                        <option value="5.5">pH 5.5</option>
+                                        <option value="7.0">pH 7.0 (เป็นกลาง)</option>
                                     </select>
                                 </p>
                             </div>
@@ -678,74 +733,82 @@
                             <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
                                 <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-biohazard text-teal-500"></i> กลไกยับยั้งแบคทีเรีย</h4>
                                 <p>
-                                    3. สภาวะกรดภายนอก สารฟลูออไรด์แปรสภาพเป็นกรดไม่มีประจุคือ 
+                                    3. เพื่อทะลุผนังเซลล์แบคทีเรียเข้าไปได้ สารฟลูออไรด์ต้องแปรสภาพเป็นกรดไม่มีประจุที่มีชื่อว่าอะไร?
                                     <select id="mol-chemical-3" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="hf">กรดไฮโดรฟลูออริก (HF)</option>
                                         <option value="naf">โซเดียมฟลูออไรด์ (NaF)</option>
+                                        <option value="nacl">เกลือแกง (NaCl)</option>
+                                        <option value="hf">กรดไฮโดรฟลูออริก (HF)</option>
+                                        <option value="sdf">ซิลเวอร์ไดเอมีน (SDF)</option>
                                     </select> 
-                                    เพื่อทะลุผ่านเซลล์แบคทีเรีย
                                 </p>
                                 <p>
-                                    4. สารดังกล่าวเมื่อทะลุเข้าไปจะแตกตัวทำลายขวางการทำงานของเอนไซม์ชื่อ 
+                                    4. ฟลูออไรด์จะเข้าไปขัดขวางการทำงานของเอนไซม์ชนิดใด เพื่อหยุดยั้งไม่ให้แบคทีเรียผลิตกรด?
                                     <select id="mol-enzyme-4" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="enolase">Enolase</option>
-                                        <option value="amylase">Amylase</option>
+                                        <option value="amylase">Amylase (อะไมเลส)</option>
+                                        <option value="lipase">Lipase (ไลเปส)</option>
+                                        <option value="enolase">Enolase (อีโนเลส)</option>
+                                        <option value="protease">Protease (โปรติเอส)</option>
                                     </select> 
-                                    เพื่อระงับการผลิตกรดในแบคทีเรีย
                                 </p>
                             </div>
 
                             <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
                                 <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-box text-teal-500"></i> กลไกคลังสารสำรองฟลูออไรด์</h4>
                                 <p>
-                                    5. การทาฟลูออไรด์เฉพาะที่เข้มข้นสูงจะเกิดตะกอนสะสมเก็บเป็นคลังสำรองเคมีชื่อ 
+                                    5. การทาฟลูออไรด์ความเข้มข้นสูง จะสร้างตะกอนเคลือบฟันเพื่อเป็นคลังเสบียงสำรอง ตะกอนนี้ชื่อว่าอะไร?
                                     <select id="mol-crystal-5" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
+                                        <option value="ha">Hydroxyapatite (HA)</option>
                                         <option value="caf2">Calcium Fluoride (CaF2)</option>
-                                        <option value="ha">Hydroxyapatite</option>
+                                        <option value="agi">Silver Iodide (AgI)</option>
+                                        <option value="nacl">Sodium Chloride (NaCl)</option>
                                     </select> 
                                 </p>
                                 <p>
-                                    6. สารสำรองดังกล่าวจะค่อยๆ สลายตัวปล่อยประจุฟลูออไรด์และไอออนบวกคือ 
+                                    6. คลังเสบียงนี้จะค่อยๆ สลายตัวปล่อยฟลูออไรด์ออกมาทำงานร่วมกับแร่ธาตุใดเพื่อฟื้นฟูผิวฟัน?
                                     <select id="mol-ion-6" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="ca">Calcium (Ca²⁺)</option>
+                                        <option value="k">Potassium (K⁺)</option>
                                         <option value="na">Sodium (Na⁺)</option>
+                                        <option value="ca">Calcium (Ca²⁺)</option>
+                                        <option value="ag">Silver (Ag⁺)</option>
                                     </select> 
-                                    ออกมาทำปฏิกิริยาฟื้นคืนสภาพผิวฟัน
                                 </p>
                             </div>
 
                             <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
                                 <h4 class="font-bold text-indigo-900 flex items-center gap-1.5"><i class="fa-solid fa-vial text-teal-500"></i> กลไกเคมีระงับโรคในสาร 38% SDF</h4>
                                 <p>
-                                    7. สารประกอบโลหะหนักที่มีฤทธิ์แกร่งทำลายผนังเซลล์ของเชื้อผุฟันคือ 
+                                    7. ในน้ำยา SDF สารประกอบใดที่มีฤทธิ์ฆ่าเชื้อและทำลายผนังเซลล์ของแบคทีเรีย?
                                     <select id="mol-chem-7" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="silver">Silver (Ag⁺)</option>
                                         <option value="zinc">Zinc (Zn²⁺)</option>
+                                        <option value="silver">Silver (Ag⁺)</option>
+                                        <option value="copper">Copper (Cu²⁺)</option>
+                                        <option value="iron">Iron (Fe²⁺)</option>
                                     </select> 
                                 </p>
                                 <p>
-                                    8. สารดังกล่าวออกฤทธิ์ขจัดทำลายและต้านแบคทีเรียก่อฟันผุหลักชนิด 
+                                    8. น้ำยา SDF จะออกฤทธิ์หยุดยั้งการลุกลามและทำลายแบคทีเรียก่อฟันผุตัวหลักที่มีชื่อว่าอะไร?
                                     <select id="mol-bacteria-8" class="mx-1 p-1 bg-white border border-slate-200 rounded outline-none font-semibold text-teal-600">
                                         <option value="">-- เลือกคำตอบ --</option>
-                                        <option value="mutans">S. mutans</option>
                                         <option value="aureus">S. aureus</option>
+                                        <option value="lacto">Lactobacillus</option>
+                                        <option value="coli">E. coli</option>
+                                        <option value="mutans">S. mutans</option>
                                     </select> 
-                                    เพื่อหยุดยั้งการลุกลาม
                                 </p>
                             </div>
                         </div>
 
-                        <button onclick="validateMolecularMatch()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">วิเคราะห์สรุปกลไกโมเลกุล</button>
+                        <button onclick="validateMolecularMatch()" id="btn-s4m1" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition">วิเคราะห์สรุปกลไกโมเลกุล</button>
                     </div>
 
                     <!-- Stage 4 Lock & Next Trigger -->
                     <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage4-progress-lbl">⚠️ กรุณาระบุโครงสร้างและกลไกโมเลกุลให้ถูกต้องทั้งหมดเพื่อเปิดปุ่มไปต่อด่านถัดไป</span>
+                        <span class="text-xs text-slate-500 font-medium text-slate-500" id="stage4-progress-lbl">⚠️ กรุณาระบุโครงสร้างและกลไกโมเลกุลให้ถูกต้องหรือจนครบสิทธิ์ เพื่อไปต่อ</span>
                         <button id="btn-next-stage4" onclick="switchStage('stage5')" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-xs transition duration-200 items-center gap-2 shadow-lg shadow-emerald-600/20 animate-fadeIn">
                             ไปต่อด่านที่ 5: ข้อสอบคัดสรร <i class="fa-solid fa-chevron-right"></i>
                         </button>
@@ -758,11 +821,12 @@
                         <div>
                             <span class="text-xs font-semibold uppercase tracking-wider text-rose-600">ด่านที่ 5</span>
                             <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                                <i class="fa-solid fa-circle-question text-rose-500"></i> 10 Premium Clinical Challenge MCQs
+                                <i class="fa-solid fa-circle-question text-rose-500"></i> 10 Premium Clinical MCQs
                             </h2>
+                            <p class="text-xs text-slate-500 mt-1">ข้อละ 3 คะแนน | จำกัดสิทธิ์การส่งคำตอบ (Submit) 3 ครั้งเท่านั้น!</p>
                         </div>
                         <span id="quiz-score-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-100 hidden">
-                            คะแนนสะสม: <span id="quiz-score-val" class="font-bold">0</span>/10
+                            ตอบถูก: <span id="quiz-score-val" class="font-bold">0</span>/10
                         </span>
                     </div>
 
@@ -771,9 +835,9 @@
 
                     <!-- Final Submit Button inside MCQ Stage -->
                     <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <span class="text-xs text-slate-500">เมื่อทำข้อสอบปรนัยทั้งหมดเสร็จสิ้นแล้ว ให้กดปุ่มด้านขวาเพื่อส่งคำตอบทั้งหมดรับใบประกาศ</span>
-                        <button onclick="submitQuiz()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-sm font-bold py-3.5 px-8 rounded-2xl transition duration-300 transform hover:scale-105 shadow-lg shadow-emerald-500/25 flex items-center gap-2">
-                            <i class="fa-solid fa-flag-checkered"></i> เสร็จสิ้นและส่งคำตอบทั้งหมด <i class="fa-solid fa-paper-plane"></i>
+                        <span class="text-xs text-slate-500" id="s5-progress-lbl">เมื่อทำข้อสอบครบทุกข้อ ให้กดปุ่มด้านขวาเพื่อส่งคำตอบ (จำกัด 3 ครั้ง)</span>
+                        <button onclick="submitQuiz()" id="btn-submit-quiz" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-sm font-bold py-3.5 px-8 rounded-2xl transition duration-300 transform hover:scale-105 shadow-lg shadow-emerald-500/25 flex items-center gap-2">
+                            <i class="fa-solid fa-flag-checkered"></i> ส่งคำตอบสรุปผลลัพธ์ <i class="fa-solid fa-paper-plane"></i>
                         </button>
                     </div>
                 </section>
@@ -793,20 +857,20 @@
                         <!-- Certificate Viewport Container -->
                         <div class="border-8 border-slate-100 p-6 sm:p-8 rounded-2xl bg-white w-full max-w-md relative flex flex-col items-center gap-4 shadow-sm">
                             <div class="absolute top-2 left-2 text-[8px] text-slate-400 font-bold uppercase tracking-wider">ทันตสาธารณสุขสเปซ</div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">ใบประกาศความสำเร็จทางสรีรวิทยาและระบบชุมชน</span>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">ใบประกาศความเชี่ยวชาญการประยุกต์ใช้ฟลูออไรด์</span>
                             <div class="font-bold text-base sm:text-lg text-slate-800 tracking-tight border-b-2 border-slate-200 pb-2 w-full max-w-xs uppercase">
                                 <span id="cert-student-name">ทันตสาธารณสุขผู้มุ่งมั่น</span>
                             </div>
                             <p class="text-[11px] text-slate-500 max-w-xs leading-relaxed">
-                                ได้เข้าร่วมและทำแบบฝึกหัดกิจกรรมเรื่องฟลูออไรด์เชิงลึก (Dental Fluoride Interactive Challenge) บรรลุการประเมินวิเคราะห์สถานการณ์สมบูรณ์แบบ
+                                ได้เข้าร่วมและทำแบบฝึกหัดกิจกรรมเรื่องฟลูออไรด์เชิงลึก (Dental Fluoride Interactive Challenge) สิ้นสุดการประเมินวิเคราะห์สถานการณ์
                             </p>
-                            <div class="flex justify-between items-center w-full text-[10px] text-slate-400 border-t border-slate-100 pt-3">
-                                <span>คะแนนรวม: <b class="text-teal-600" id="cert-score">10/10</b></span>
-                                <span id="cert-date">วันที่ระบุปัจจุบัน</span>
+                            <div class="flex flex-col items-center w-full text-[12px] text-slate-600 border-t border-slate-100 pt-3 gap-1">
+                                <span>คะแนนสะสมรวมสุทธิ: <b class="text-teal-600 text-lg" id="cert-score">0/100</b></span>
+                                <span id="cert-date" class="text-[10px] text-slate-400 mt-2">วันที่ระบุปัจจุบัน</span>
                             </div>
                         </div>
 
-                        <div class="flex gap-2 w-full max-w-xs justify-center">
+                        <div class="flex gap-2 w-full max-w-xs justify-center relative z-10">
                             <button onclick="printCert()" class="flex-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition shadow-md shadow-indigo-600/20">
                                 <i class="fa-solid fa-print"></i> พิมพ์ใบประกาศ
                             </button>
@@ -862,7 +926,7 @@
     </div>
 
     <script>
-        // Web Audio API for satisfying gamified sounds
+        // Web Audio API for gamified sounds
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtxInstance = null;
 
@@ -878,17 +942,17 @@
                 gain.connect(ctx.destination);
 
                 if (type === 'success') {
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
-                    osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
                     gain.gain.setValueAtTime(0.1, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
                     osc.start();
                     osc.stop(ctx.currentTime + 0.4);
                 } else if (type === 'fail') {
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
-                    osc.frequency.setValueAtTime(165, ctx.currentTime + 0.15); // E3
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    osc.frequency.setValueAtTime(165, ctx.currentTime + 0.15);
                     gain.gain.setValueAtTime(0.1, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
                     osc.start();
@@ -905,48 +969,46 @@
             }
         }
 
-        // Global State: FIX unlockedStages.stage1 to TRUE so players can immediately play!
+        // --- GLOBAL STATE ---
         let appState = {
-            mode: 'creator', // 'creator' or 'player'
+            mode: 'player', // Default to player to enforce sequential stage playing automatically
             currentStage: 'home',
             unlockedStages: {
                 'home': true,
-                'stage1': true,  // CRITICAL FIX: Unlock Stage 1 by default so clicking "Start Play" works!
+                'stage1': true, 
                 'stage2': false,
                 'stage3': false,
                 'stage4': false,
                 'stage5': false,
                 'cert': false
             },
-            c1_selected_path: null,
+            // LIMIT SYSTEM (3 Attempts) and SCORES
+            attempts: {}, // Format: { 'taskId': number_of_attempts }
+            completedTasks: {}, // Format: { 'taskId': boolean_if_locked }
+            totalScore: 0,
+            maxPossibleScore: 100, // S1:20, S2:20, S3:20, S4:10, S5:30
+            
             c1_selected_subpath: null,
-            c2_selected_path: null,
             c2_selected_subpath: null,
-            c3_selected_path: null,
             c3_selected_subpath: null,
-            c4_selected_path: null,
             c4_selected_subpath: null,
             answers: {
-                milk_ppm_verified: false,
-                dry_brush_rules_verified: false,
-                mission33_verified: false,
-                mission34_verified: false,
-                molecular_match_verified: false,
                 quiz_answers: {}
             }
         };
 
+        // Standard MCQ DB (Correct answers evenly distributed)
         let mcqDatabase = [
             {
                 id: 1,
                 question: "โครงสร้างผลึกเคลือบฟันชนิด Fluoroapatite มีความทนทานต่อกรดมากกว่า Hydroxyapatite เนื่องจากปัจจัยอุณหพลศาสตร์ข้อใดเด่นชัดที่สุด?",
                 choices: [
                     "ค่าคงที่ผลคูณการละลายสูงกว่าดึงดูดแคลเซียมเข้ารอยโรค",
-                    "รัศมีไอออนิกของ F⁻ เล็กและประจุหนาแน่นจัดสมมาตรผลึกเสถียรกว่าเดิม",
                     "ทำให้ผลึกเปลี่ยนรูปเป็น Monoclinic เปล่งแรงขับประจุไล่กรด",
+                    "รัศมีไอออนิกของ F⁻ เล็กและประจุหนาแน่นจัดสมมาตรผลึกเสถียรกว่าเดิม",
                     "ฟลูออไรด์ปล่อยก๊าซคาร์บอนมาสร้างสภาวะบัฟเฟอร์ในช่องปาก"
                 ],
-                correctIndex: 1,
+                correctIndex: 2, // C
                 explanation: "รัศมีไอออนิกของ F⁻ (1.36 Å) มีขนาดกะทัดรัดกว่า OH⁻ (1.40 Å) การเข้าไปทดแทนตำแหน่งจึงเกิดความหนาแน่นสูง ลดแรงผลักกัน มีพลังงานอิสระกิ๊บส์ต่ำลงทำให้เกิดผลึกเกราะแข็งทนกรดได้ถึง pH 4.5"
             },
             {
@@ -955,22 +1017,22 @@
                 choices: [
                     "ยับยั้งการปั๊มโมเลกุลน้ำตาล Glucose ของเซลล์โดยตรง",
                     "การแย่งเกาะที่ตำแหน่งของกรดอินทรีย์ภายนอกสภาวะแห้ง",
-                    "เกิดสารพิกัดร่วมเชิงซ้อนรั้งไอออนเหนี่ยวนำ Mg²⁺ และอนินทรีย์ฟอสเฟต ออกจากตำแหน่งทำงาน",
-                    "กระตุ้นออกซิเดชันทำลายสายห่วงโซ่ดีเอ็นเอแบคทีเรียทั้งหมด"
+                    "กระตุ้นออกซิเดชันทำลายสายห่วงโซ่ดีเอ็นเอแบคทีเรียทั้งหมด",
+                    "เกิดสารพิกัดร่วมเชิงซ้อนรั้งไอออนเหนี่ยวนำ Mg²⁺ และอนินทรีย์ฟอสเฟต ออกจากตำแหน่งทำงาน"
                 ],
-                correctIndex: 2,
+                correctIndex: 3, // D
                 explanation: "ฟลูออไรด์จะเข้าไปจับตัวกับประจุแมกนีเซียมและฟอสเฟตเกิดโครงสร้างคอมเพล็กซ์ขวางสรีระตำแหน่งใช้งานของ Enolase ส่งผลให้แบคทีเรียผลิตกรดไม่ได้"
             },
             {
                 id: 3,
                 question: "เหตุใดทันตสาธารณสุขจึงต้องหลีกเลี่ยงสาร APF Gel ความเข้มข้น 1.23% ในคนไข้ที่มีวัสดุอุดเรซินคอมโพสิตและครอบเซรามิก?",
                 choices: [
-                    "APF ทำปฏิกิริยาแข็งตัวระเหยเป็นไอละลายติดตัวยึดเกาะฟิล์มแห้ง",
                     "สภาวะกรดเหนี่ยวนำให้เกิดกรดไฮโดรฟลูออริก (HF) กัดผิวสารเติมแต่งแก้วและเซรามิกจนหยาบขรุขระ",
+                    "APF ทำปฏิกิริยาแข็งตัวระเหยเป็นไอละลายติดตัวยึดเกาะฟิล์มแห้ง",
                     "เจลกรดจะไปย้อนกระบวนการสลัดแสงบ่มโพลีเมอร์ให้เหลวคืนรูปเดิม",
                     "APF เข้าไปเปลี่ยนสัมผัสสีของวัสดุอุดใหอมแดงพุพองเสื่อมสภาพเร็ว"
                 ],
-                correctIndex: 1,
+                correctIndex: 0, // A
                 explanation: "เจล APF มีความเป็นกรดจัด (pH 3.0-3.5) ซึ่งกรดจะเหนี่ยวนำให้เกิด HF ที่มีคุณสมบัติในการกัดกรดวัสดุบูรณะประเภทแก้วฟิลเลอร์และเซรามิก ส่งผลให้ผิวหยาบขรุขระ กักเก็บคราบสีคราบอาหารได้ง่าย"
             },
             {
@@ -982,7 +1044,7 @@
                     "สารธรรมชาติลดการดูดซึมของกระเพาะอาหารลงเหลือศูนย์",
                     "วาร์นิชซึมซับเข้าเนื้อฟันเข้าหลอดเลือดทันทีโดยไม่ผ่านระบบท้องกระเพาะ"
                 ],
-                correctIndex: 1,
+                correctIndex: 1, // B
                 explanation: "วาร์นิชมีความเหนียวข้นแข็งตัวเกาะผิวฟันแน่นหนาเมื่อสัมผัสความชื้นปากทันที และปริมาตรทาในเด็กต่ำกว่า 6 ปีมีน้อยมาก (0.1 - 0.25 ml) ป้องกันอุบัติเหตุกระตุ้นระบบกลืนสารเคมีจำนวนมากลงท้อง"
             },
             {
@@ -990,23 +1052,23 @@
                 question: "ช่วงอายุใดที่หน่อฟันแท้หน้าบนคู่กลาง มีความไวและเสี่ยงเกิดสภาวะฟันตกกระ (Dental Fluorosis) มากที่สุดหากได้ฟลูออไรด์สะสม?",
                 choices: [
                     "ช่วงสัปดาห์แรกหลังคลอดพ้นครรภ์มารดา",
-                    "ช่วงอายุ 18 - 36 เดือน (วัยสะสมแร่ธาตุและเปลี่ยนสลัดสระโปรตีน)",
                     "ช่วงอายุ 6 - 8 ปี ที่ตัวฟันแท้แทงทะลุเนื้อเหงือกสลายปุ่มขากรรไกร",
-                    "ช่วงอายุ 12 - 16 ปี วัยเตรียมฟันกรามหลังขึ้นสุกงอม"
+                    "ช่วงอายุ 12 - 16 ปี วัยเตรียมฟันกรามหลังขึ้นสุกงอม",
+                    "ช่วงอายุ 18 - 36 เดือน (วัยสะสมแร่ธาตุและเปลี่ยนสลัดสระโปรตีน)"
                 ],
-                correctIndex: 1,
+                correctIndex: 3, // D
                 explanation: "หน่อฟันหน้าบนแท้คู่กลางอยู่ในระยะ Maturation Stage ช่วงอายุ 18-36 เดือน สภาวะฟลูออไรด์สะสมสูงในระบบเลือดช่วงนี้จะรบกวนเอนไซม์สลายโปรตีนอินทรีย์ เกิดการพัฒนาผลึกโปร่งขุ่นและเนื้อพรุน"
             },
             {
                 id: 6,
                 question: "ยาสีฟันสูตรควบคุมพิเศษความเข้มข้นฟลูออไรด์ 5000 ppm บ่งชี้ประโยชน์รักษาสูงสุดแก่คนไข้กลุ่มใดตามเกณฑ์ทันตกรรมป้องกัน?",
                 choices: [
-                    "เด็กอนุบาลฟันน้ำนมขึ้นช้ากว่าสัดส่วนมาตรฐาน",
                     "คนไข้มะเร็งศีรษะใบหน้าได้รับการฉายรังสีจนต่อมน้ำลายพังทลาย (Radiation Caries)",
+                    "เด็กอนุบาลฟันน้ำนมขึ้นช้ากว่าสัดส่วนมาตรฐาน",
                     "ผู้ป่วยจัดฟันที่มีสภาวะโรคเหงือกบวมแดงพุพอง",
                     "คุณแม่ตั้งครรภ์เพื่อเร่งการตกตะกอนเนื้อกระดูกสะโพกตนเอง"
                 ],
-                correctIndex: 1,
+                correctIndex: 0, // A
                 explanation: "คนไข้มะเร็งฉายแสงบริเวณใบหน้าจะสูญเสียอัตราการหลั่งน้ำลายอย่างรุนแรง ขาดระบบบัฟเฟอร์ล้างฟลูออไรด์ธรรมชาติและสุ่มเสี่ยงเกิดฟันผุลุกลาม (Radiation Caries) จึงจัดเป็นข้อบ่งชี้หลักของยาสีฟัน 5,000 ppm"
             },
             {
@@ -1014,11 +1076,11 @@
                 question: "สารระงับฟันผุแบบไม่กรอฟันผุ 38% SDF ใช้คุณสมบัติทางเคมีของสสารชนิดใดผสมผสานกันสร้างผลลัพธ์ยับยั้งลุกลาม?",
                 choices: [
                     "สังกะสีสร้างเกราะ และฟอสเฟตย่อยสลายคอลลาเจนเก่า",
-                    "เงินทำลายผนังเซลล์และดีเอ็นเอของแบคทีเรีย และฟลูออไรด์เข้มข้นพิเศษเร่งคืนแร่ธาตุให้เกราะแข็ง",
                     "แอลกอฮอล์สลายตัวเร็วดับเสียวคู่กับเจลแป้งปิดช่องว่างฟันร้าว",
+                    "เงินทำลายผนังเซลล์และดีเอ็นเอของแบคทีเรีย และฟลูออไรด์เข้มข้นพิเศษเร่งคืนแร่ธาตุให้เกราะแข็ง",
                     "ซิลิกาอุดท่อและฟอสฟอรัสเหนี่ยวนำแรงตึงผิวฟัน"
                 ],
-                correctIndex: 1,
+                correctIndex: 2, // C
                 explanation: "ไอออนโลหะเงิน (Silver) ใน 38% SDF จะเข้าไปสลายเยื่อหุ้มและโปรตีนจุลชีพฆ่าเชื้ออย่างเฉียบพลัน ร่วมกับฟลูออไรด์เข้มข้นสูงมากที่จะเหนี่ยวนำคืนแร่ธาตุเกิดเกราะผลึกประคองรอยโรคผุให้หยุดทำงานถาวร"
             },
             {
@@ -1030,7 +1092,7 @@
                     "ไฮโดรเจนเปอร์ออกไซด์ฟอกเม็ดสีฟัน",
                     "ทาน้ำยาขัดสกัดแอลกอฮอล์"
                 ],
-                correctIndex: 1,
+                correctIndex: 1, // B
                 explanation: "เมื่อทา Potassium Iodide (KI) ตามหลังทันที สารจะทำปฏิกิริยากับไอออนเงินส่วนเกิน เกิดปฏิกิริยาตกตะกอนเป็นเกลือเงินไอโอไดด์ (AgI) ซึ่งมีผงละเอียดสีครีมสว่างขาวขุ่น ช่วยทดแทนเนื้อดำไม่พึงประสงค์ได้เป็นอย่างดี"
             },
             {
@@ -1038,11 +1100,11 @@
                 question: "สภาวะการขจัดขับไอออนฟลูออไรด์ทางระบบท่อไต จะเพิ่มปริมาณสูงขจัดออกจากร่างกายได้ดีที่สุดในสภาพปัสสาวะเป็นด่างจากปัจจัยใด?",
                 choices: [
                     "ปัสสาวะกรดรังแกเซลล์และเร่งอุบัติเหตุนิ่วแคลเซียมฟลูออไรด์",
-                    "ปัสสาวะด่างรักษารูปแบบไอออนประจุลบเดี่ยว F⁻ ขัดขวางกระบวนการซึมซับกลับผ่านผนังเยื่อบุหลอดเลือด",
                     "อินซูลินหลั่งคอยสะสมน้ำตาลช่วยจับแคลเซียมเข้าร่างกาย",
+                    "ปัสสาวะด่างรักษารูปแบบไอออนประจุลบเดี่ยว F⁻ ขัดขวางกระบวนการซึมซับกลับผ่านผนังเยื่อบุหลอดเลือด",
                     "น้ำดีเหนี่ยวนำให้ตับช่วยไตในการระบายไอออนเข้าลำไส้"
                 ],
-                correctIndex: 1,
+                correctIndex: 2, // C
                 explanation: "ในปัสสาวะที่เป็นด่าง (Alkaline Urine) สารฟลูออไรด์จะอยู่ในรูปประจุลบอิสระ F⁻ ซึ่งไม่สามารถแพร่กระจายละลายซึมผ่านเยื่อบุผิวท่อไตกลับเข้าสู่กระแสเลือดได้ง่าย จึงถูกระบายขับถ่ายออกทางไตสูงกว่าสภาพปัสสาวะเป็นกรด"
             },
             {
@@ -1050,11 +1112,11 @@
                 question: "การวัดผลประเมินประสิทธิผลระยะยาวของโครงการนมฟลูออไรด์โรงเรียนในระบาดวิทยาทันตสาธารณสุข ควรยึดเกณฑ์ชี้วัดข้อใดมากที่สุด?",
                 choices: [
                     "ยอดจำหน่ายถุงนมพาสเจอร์ไรส์ในสหกรณ์และร้านค้าชุมชนสะสมสูงขึ้น",
-                    "การลดลงอย่างมีนัยสำคัญของโรคฟันผุใหม่บนหน่อฟันแท้ (Caries Increment on Permanent Teeth) ของกลุ่มเป้าหมายเทียบกลุ่มควบคุม",
                     "สถิติความถี่บีบยาสีฟันของประชาชนทั้งพื้นที่เป็นประจำ",
-                    "ระดับดัชนีคะแนนความกระปรี้กระเปร่าและร่างกายเจริญเติบโตของเด็กนักเรียน"
+                    "ระดับดัชนีคะแนนความกระปรี้กระเปร่าและร่างกายเจริญเติบโตของเด็กนักเรียน",
+                    "การลดลงอย่างมีนัยสำคัญของโรคฟันผุใหม่บนหน่อฟันแท้ (Caries Increment on Permanent Teeth) ของกลุ่มเป้าหมายเทียบกลุ่มควบคุม"
                 ],
-                correctIndex: 1,
+                correctIndex: 3, // D
                 explanation: "การวัดผลลัพธ์เชิงระบาดวิทยาของฟลูออไรด์ระบบร่างกาย ต้องวัดจากการลดลงของอุบัติการณ์ฟันผุใหม่บนฟันแท้ (Caries Increment) ซึ่งเป็นผลสัมฤทธิ์ปลายทางที่ประเมินการพัฒนาและเกราะป้องกันผลึกกระดูกฟันอย่างมีประสิทธิภาพ"
             }
         ];
@@ -1083,12 +1145,110 @@
                     showNotification("เกิดข้อผิดพลาดในการโหลดข้อสอบที่แชร์ ระบบจะใช้ข้อสอบมาตรฐาน", "fail");
                 }
             }
-
             if (playMode === 'true' || window.location.hash === '#play') {
                 appState.mode = 'player';
             } else {
                 appState.mode = 'creator';
             }
+        }
+
+        function renderMCQs() {
+            const container = document.getElementById('mcqs-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            mcqDatabase.forEach((q, index) => {
+                let choicesHTML = '';
+                q.choices.forEach((choice, cIndex) => {
+                    choicesHTML += `
+                        <button onclick="selectQuizAnswer(${q.id}, ${cIndex})" id="btn-choice-${q.id}-${cIndex}" class="w-full text-left p-3 border border-slate-200 bg-white hover:border-rose-500 rounded-xl text-xs transition focus:outline-none">
+                            <span class="font-bold text-slate-500 mr-2">${String.fromCharCode(65 + cIndex)}.</span> ${choice}
+                        </button>
+                    `;
+                });
+
+                container.innerHTML += `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+                        <h3 class="font-bold text-sm text-slate-900"><span class="text-rose-500 mr-1">ข้อ ${index + 1}.</span> ${q.question}</h3>
+                        <div class="space-y-2">
+                            ${choicesHTML}
+                        </div>
+                        <div id="explanation-${q.id}" class="hidden mt-3 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 leading-relaxed">
+                            <strong class="text-teal-700">คำอธิบาย:</strong> ${q.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectQuizAnswer(qId, choiceIndex) {
+            playSound('click');
+            const taskId = 's5quiz';
+            if (appState.completedTasks[taskId]) return; // หากส่งคำตอบไปแล้วจะไม่ให้แก้
+
+            appState.answers.quiz_answers[qId] = choiceIndex;
+            
+            // อัปเดต UI ของปุ่มตัวเลือก
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`btn-choice-${qId}-${i}`);
+                if (btn) {
+                    if (i === choiceIndex) {
+                        btn.className = "w-full text-left p-3 border-2 border-rose-600 bg-rose-50 text-rose-900 rounded-xl text-xs font-bold transition focus:outline-none";
+                    } else {
+                        btn.className = "w-full text-left p-3 border border-slate-200 bg-white hover:border-rose-500 rounded-xl text-xs transition focus:outline-none";
+                    }
+                }
+            }
+        }
+
+        function renderEditorMCQs() {
+            const container = document.getElementById('editor-mcqs-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            mcqDatabase.forEach((q, index) => {
+                let choicesHTML = '';
+                q.choices.forEach((choice, cIndex) => {
+                    choicesHTML += `
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-slate-400 w-4">${String.fromCharCode(65 + cIndex)}.</span>
+                            <input type="text" id="edit-q-choice-${q.id}-${cIndex}" value="${choice}" class="w-full p-2 text-xs border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-indigo-500">
+                        </div>
+                    `;
+                });
+
+                container.innerHTML += `
+                    <div class="p-4 border border-slate-200 rounded-xl bg-white space-y-3">
+                        <div class="font-bold text-indigo-900 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-md bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px]">${index + 1}</span>
+                            แก้ไขข้อที่ ${index + 1}
+                        </div>
+                        <textarea id="edit-q-text-${q.id}" class="w-full p-2 text-xs border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-indigo-500 custom-scrollbar" rows="2">${q.question}</textarea>
+                        <div class="space-y-2 pl-2 border-l-2 border-slate-100">
+                            ${choicesHTML}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openEditorModal() {
+            playSound('click');
+            const modal = document.getElementById('modal-editor');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditorModal() {
+            playSound('click');
+            const modal = document.getElementById('modal-editor');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function printCert() {
+            playSound('click');
+            window.print();
         }
 
         function showNotification(message, type = 'success') {
@@ -1103,19 +1263,28 @@
                 : `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
 
             container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
             playSound(type === 'success' ? 'success' : 'fail');
 
             setTimeout(() => {
                 toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
+                setTimeout(() => { toast.remove(); }, 300);
             }, 4000);
+        }
+
+        // Score Updating helper
+        function updateScore(points) {
+            appState.totalScore += points;
+            document.getElementById('header-score').innerText = appState.totalScore;
+        }
+
+        // Expertise calculation
+        function getExpertiseLevel(total) {
+            if (total >= 90) return { label: "ระดับ 5: Master (ปรมาจารย์ทันตสาธารณสุข)", color: "text-purple-600" };
+            if (total >= 75) return { label: "ระดับ 4: Expert (ผู้เชี่ยวชาญชำนาญการ)", color: "text-emerald-600" };
+            if (total >= 50) return { label: "ระดับ 3: Practitioner (ผู้ปฏิบัติการมาตรฐาน)", color: "text-indigo-600" };
+            if (total >= 25) return { label: "ระดับ 2: Learner (ผู้เรียนรู้)", color: "text-amber-600" };
+            return { label: "ระดับ 1: Novice (ผู้เริ่มต้น)", color: "text-rose-600" };
         }
 
         function startPlaying() {
@@ -1128,12 +1297,15 @@
             playSound('click');
             if (appState.mode === 'creator') {
                 appState.mode = 'player';
+                document.getElementById('btn-toggle-editor').innerHTML = '<i class="fa-solid fa-wrench"></i> สลับเป็นโหมดผู้สร้าง';
                 showNotification("เข้าสู่โหมดผู้เล่น (จำลองสิทธิพรีวิว)");
             } else {
                 appState.mode = 'creator';
+                document.getElementById('btn-toggle-editor').innerHTML = '<i class="fa-solid fa-eye"></i> สลับเป็นพรีวิวผู้เล่น';
                 showNotification("สลับเป็นโหมดผู้สร้างเนื้อหาสำเร็จ!");
             }
             updateUI();
+            checkStageLocks(); // รีเฟรชภาพล็อคทันที
         }
 
         function generateShareLink() {
@@ -1148,7 +1320,6 @@
             dummy.select();
             document.execCommand('copy');
             document.body.removeChild(dummy);
-
             showNotification("คัดลอกลิงก์ผู้เล่นที่ล็อกลิขสิทธิ์แล้ว! สามารถส่งแชร์เพื่อเล่นได้ทันที");
         }
 
@@ -1168,15 +1339,11 @@
         function saveAndShareFromEditor() {
             for (let i = 0; i < mcqDatabase.length; i++) {
                 const id = mcqDatabase[i].id;
-                const questionVal = document.getElementById(`edit-q-text-${id}`).value;
-                mcqDatabase[i].question = questionVal;
-                
+                mcqDatabase[i].question = document.getElementById(`edit-q-text-${id}`).value;
                 for (let c = 0; c < 4; c++) {
-                    const choiceVal = document.getElementById(`edit-q-choice-${id}-${c}`).value;
-                    mcqDatabase[i].choices[c] = choiceVal;
+                    mcqDatabase[i].choices[c] = document.getElementById(`edit-q-choice-${id}-${c}`).value;
                 }
             }
-
             renderMCQs();
             renderEditorMCQs();
             closeEditorModal();
@@ -1184,9 +1351,9 @@
         }
 
         function trySwitchStage(stageName) {
-            if (appState.mode === 'player' && !appState.unlockedStages[stageName]) {
+            if (appState.mode === 'player' && stageName !== 'home' && !appState.unlockedStages[stageName]) {
                 playSound('fail');
-                showNotification("กรุณาทำภารกิจและปลดล็อกด่านตามลำดับก่อนนะครับ", "fail");
+                showNotification("ด่านนี้ยังถูกล็อคอยู่! กรุณาทำภารกิจด่านก่อนหน้าให้สำเร็จตามลำดับ", "fail");
                 return;
             }
             switchStage(stageName);
@@ -1203,9 +1370,7 @@
             const tabs = ['home', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
             tabs.forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
-                if (el) {
-                    el.className = "px-5 py-4 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 whitespace-nowrap";
-                }
+                if (el) el.className = "px-5 py-4 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 whitespace-nowrap";
             });
 
             if (stageName === 'cert') {
@@ -1213,11 +1378,8 @@
             } else {
                 document.getElementById(`section-${stageName}`).classList.remove('hidden');
                 const activeTab = document.getElementById(`tab-${stageName}`);
-                if (activeTab) {
-                    activeTab.className = "px-5 py-4 text-xs sm:text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 whitespace-nowrap";
-                }
+                if (activeTab) activeTab.className = "px-5 py-4 text-xs sm:text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 whitespace-nowrap";
             }
-
             appState.currentStage = stageName;
             document.getElementById('workspace-content').scrollTop = 0;
             checkStageLocks();
@@ -1226,6 +1388,7 @@
         function checkStageLocks() {
             const tabs = ['stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
             tabs.forEach(t => {
+                // จัดการ Navigation Tabs ด้านบน
                 const el = document.getElementById(`tab-${t}`);
                 if (el) {
                     if (appState.mode === 'player' && !appState.unlockedStages[t]) {
@@ -1234,6 +1397,21 @@
                     } else {
                         el.classList.remove('disabled-tab');
                         el.title = "";
+                    }
+                }
+                
+                // จัดการล็อคการ์ดบนหน้า Home Screen (เพิ่ม Lock Overlay)
+                const cardEl = document.getElementById(`card-${t}`);
+                const lockOverlay = document.getElementById(`lock-overlay-${t}`);
+                if (cardEl) {
+                    if (appState.mode === 'player' && !appState.unlockedStages[t]) {
+                        cardEl.classList.add('opacity-60', 'cursor-not-allowed', 'bg-slate-50/50');
+                        cardEl.classList.remove('cursor-pointer', 'hover:shadow-md');
+                        if(lockOverlay) lockOverlay.classList.remove('hidden');
+                    } else {
+                        cardEl.classList.remove('opacity-60', 'cursor-not-allowed', 'bg-slate-50/50');
+                        cardEl.classList.add('cursor-pointer', 'hover:shadow-md');
+                        if(lockOverlay) lockOverlay.classList.add('hidden');
                     }
                 }
             });
@@ -1258,15 +1436,15 @@
             }
         }
 
+        // --- STAGE 1 LOGIC (Cases with 3 attempts limit) ---
         function selectCase1Path(path) {
             playSound('click');
-            appState.c1_selected_path = path;
-            
+            const taskId = 's1c1';
+            if (appState.completedTasks[taskId]) return; // Stop if already cleared case
+
             document.getElementById('btn-c1-path-A').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
             document.getElementById('btn-c1-path-B').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
-
-            const selectedBtn = document.getElementById(`btn-c1-path-${path}`);
-            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
+            document.getElementById(`btn-c1-path-${path}`).className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
 
             const subContainer = document.getElementById('c1-round2-container');
             const subpathsDiv = document.getElementById('c1-subpaths');
@@ -1274,279 +1452,263 @@
 
             if (path === 'A') {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase1Subpath('A1')" id="btn-c1-sub-A1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง A1</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">เลือกใช้วาร์นิชปกติที่มีส่วนผสมของชันสน (Rosin)</span>
-                    </button>
-                    <button onclick="selectCase1Subpath('A2')" id="btn-c1-sub-A2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง A2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">เลือกใช้ผลิตภัณฑ์ปราศจากชันสน (Colophony-free Varnish)</span>
-                    </button>
+                    <button onclick="selectCase1Subpath('A1')" id="btn-c1-sub-A1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง A1</span><span class="text-[11px] text-slate-700 mt-0.5">เลือกใช้วาร์นิชปกติที่มีส่วนผสมของชันสน (Rosin)</span></button>
+                    <button onclick="selectCase1Subpath('A2')" id="btn-c1-sub-A2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง A2</span><span class="text-[11px] text-slate-700 mt-0.5">เลือกใช้ผลิตภัณฑ์ปราศจากชันสน (Colophony-free Varnish)</span></button>
                 `;
             } else {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase1Subpath('B1')" id="btn-c1-sub-B1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง B1</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ใส่เจล APF ค้างไว้ในถาดพิมพ์ฟัน 4 นาที</span>
-                    </button>
-                    <button onclick="selectCase1Subpath('B2')" id="btn-c1-sub-B2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง B2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ยกเลิกเจลกรด และแปรงแห้งด้วย 1,000 ppm Smear layer</span>
-                    </button>
+                    <button onclick="selectCase1Subpath('B1')" id="btn-c1-sub-B1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง B1</span><span class="text-[11px] text-slate-700 mt-0.5">ใส่เจล APF ค้างไว้ในถาดพิมพ์ฟัน 4 นาที</span></button>
+                    <button onclick="selectCase1Subpath('B2')" id="btn-c1-sub-B2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง B2</span><span class="text-[11px] text-slate-700 mt-0.5">ยกเลิกเจลกรด และแปรงแห้งด้วย 1,000 ppm Smear layer</span></button>
                 `;
             }
-            evaluateStage1Progress();
         }
 
         function selectCase1Subpath(subpath) {
             playSound('click');
-            appState.c1_selected_subpath = subpath;
+            const taskId = 's1c1';
             
+            if (appState.completedTasks[taskId]) {
+                showNotification("คุณเคลียร์เคสนี้สำเร็จไปแล้วครับ", "fail"); return;
+            }
+
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
+            const attemptCount = appState.attempts[taskId];
+            const isCorrect = (subpath === 'A2' || subpath === 'B2');
+            
+            // Highlight buttons
             ['A1', 'A2', 'B1', 'B2'].forEach(s => {
                 const el = document.getElementById(`btn-c1-sub-${s}`);
                 if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition";
             });
-
-            const activeBtn = document.getElementById(`btn-c1-sub-${subpath}`);
-            if (activeBtn) activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
+            document.getElementById(`btn-c1-sub-${subpath}`).className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
 
             const feedbackDiv = document.getElementById('c1-feedback');
             feedbackDiv.classList.remove('hidden');
 
-            if (subpath === 'A1') {
-                feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: แพ้ชันสนเฉียบพลัน!</strong> <p>เนื่องจากน้องมะลิมีประวัติภูมิแพ้ผิวหนังและชันสน Colophonium การทาวาร์นิชทั่วไปจะไปเหนี่ยวนำให้ช่องปากอักเสบ บวมพุพองอย่างรุนแรง ควรหลีกเลี่ยง</p>`;
-            } else if (subpath === 'A2') {
+            let msg = "";
+            if (subpath === 'A1') msg = "แพ้ชันสนเฉียบพลัน! เนื่องจากน้องมะลิมีประวัติภูมิแพ้ผิวหนังและชันสน Colophonium การทาวาร์นิชทั่วไปจะไปเหนี่ยวนำให้ช่องปากอักเสบบวมพุพอง";
+            if (subpath === 'A2') msg = "ยอดเยี่ยมและปลอดภัย! การประเมินประวัติแล้วเลือกชนิดปราศจากชันสนธรรมชาติ (Colophony-free) ช่วยให้น้องไม่เกิดสภาวะแทรกซ้อน";
+            if (subpath === 'B1') msg = "วิกฤตหลอดลมหดเกร็ง! เจลกรด APF ความหนืดสูงจะกระตุ้นเส้นประสาทเวกัสในเด็กหอบหืดรุนแรงให้เกิด Bronchospasm เฉียบพลัน";
+            if (subpath === 'B2') msg = "ปรับใช้ทางเลือกที่ปลอดภัย! การเปลี่ยนมาสู่เทคนิคแปรงแห้งช่วยเสริมฟลูออไรด์เฉพาะที่โดยไร้แรงระคายเคืองกระตุ้นหอบหืด";
+
+            if (isCorrect) {
+                appState.completedTasks[taskId] = true;
+                updateScore(5);
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ยอดเยี่ยมและปลอดภัย!</strong> <p>การประเมินประวัติแล้วเลือกชนิดปราศจากชันสนธรรมชาติ (Colophony-free) ช่วยให้น้องไม่เกิดสภาวะแทรกซ้อน และป้องกันฟันผุได้อย่างมีประสิทธิผลสูงสุด</p>`;
-            } else if (subpath === 'B1') {
+                feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-teal-600 font-bold">✨ ได้รับ 5 คะแนน (สิทธิ์ใช้ไป ${attemptCount}/3 ครั้ง)</p>`;
+                document.getElementById('btn-c1-path-A').disabled = true; document.getElementById('btn-c1-path-B').disabled = true;
+            } else {
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: วิกฤตหลอดลมหดเกร็ง!</strong> <p>เจลกรด APF pH จัด 3.0-3.5 และความหนืดสูงจะกระตุ้นเส้นประสาทเวกัสในลำคอของเด็กหอบหืดรุนแรงให้เกิด Bronchospasm เฉียบพลันจนคนไข้หายใจไม่ออก เป็นข้อควรระวังหลัก</p>`;
-            } else if (subpath === 'B2') {
-                feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ปรับใช้ทางเลือกที่ปลอดภัย!</strong> <p>การเปลี่ยนทางเลือกมาสู่เทคนิคแปรงแห้งแบบจำกัดปริมาณ ช่วยเสริมฟลูออไรด์เฉพาะที่โดยไร้แรงระคายเคืองกระตุ้นอาการหอบหืด</p>`;
+                if (attemptCount >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-rose-600 font-bold">❌ ตอบผิดครบ 3 ครั้ง ระบบบันทึกว่าไม่ผ่านเคสนี้ (0 คะแนน)</p>`;
+                    document.getElementById('btn-c1-path-A').disabled = true; document.getElementById('btn-c1-path-B').disabled = true;
+                } else {
+                    feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-rose-600 font-bold">❌ ตอบผิด! เหลือสิทธิ์วิเคราะห์อีก ${3 - attemptCount} ครั้ง</p>`;
+                }
             }
             evaluateStage1Progress();
         }
 
-        // Case 2
         function selectCase2Path(path) {
             playSound('click');
-            appState.c2_selected_path = path;
-            
-            document.getElementById('btn-c2-path-C').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
-            document.getElementById('btn-c2-path-D').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
+            const taskId = 's1c2';
+            if (appState.completedTasks[taskId]) return;
 
-            const selectedBtn = document.getElementById(`btn-c2-path-${path}`);
-            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
+            document.getElementById('btn-c2-path-C').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl transition bg-white";
+            document.getElementById('btn-c2-path-D').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl transition bg-white";
+            document.getElementById(`btn-c2-path-${path}`).className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
 
-            const subContainer = document.getElementById('c2-round2-container');
             const subpathsDiv = document.getElementById('c2-subpaths');
-            subContainer.classList.remove('hidden');
+            document.getElementById('c2-round2-container').classList.remove('hidden');
 
             if (path === 'C') {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase2Subpath('C1')" id="btn-c2-sub-C1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง C1</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ทาเจลกรดให้ทั่วช่องปากรวมถึงขอบครอบฟันเซรามิก</span>
-                    </button>
-                    <button onclick="selectCase2Subpath('C2')" id="btn-c2-sub-C2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง C2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ปรับใช้สาร 38% SDF ทาเคลือบระงับผิวรากฟันผุเฉพาะจุด</span>
-                    </button>
+                    <button onclick="selectCase2Subpath('C1')" id="btn-c2-sub-C1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง C1</span><span class="text-[11px] text-slate-700 mt-0.5">ทาเจลกรดให้ทั่วช่องปากรวมถึงขอบครอบฟันเซรามิก</span></button>
+                    <button onclick="selectCase2Subpath('C2')" id="btn-c2-sub-C2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง C2</span><span class="text-[11px] text-slate-700 mt-0.5">ปรับใช้สาร 38% SDF ทาเคลือบระงับผิวรากฟันผุเฉพาะจุด</span></button>
                 `;
             } else {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase2Subpath('D1')" id="btn-c2-sub-D1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง D1</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">บ่มเจล NaF หนาแน่นแบบใส่ล้นถาดพิมพ์ฟัน</span>
-                    </button>
-                    <button onclick="selectCase2Subpath('D2')" id="btn-c2-sub-D2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง D2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ใช้พู่กันจิ๋ว (Microbrush) บรรจงแต้มทาควบคุมปริมาตร</span>
-                    </button>
+                    <button onclick="selectCase2Subpath('D1')" id="btn-c2-sub-D1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง D1</span><span class="text-[11px] text-slate-700 mt-0.5">บ่มเจล NaF หนาแน่นแบบใส่ล้นถาดพิมพ์ฟัน</span></button>
+                    <button onclick="selectCase2Subpath('D2')" id="btn-c2-sub-D2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง D2</span><span class="text-[11px] text-slate-700 mt-0.5">ใช้พู่กันจิ๋ว (Microbrush) บรรจงแต้มทาควบคุมปริมาตร</span></button>
                 `;
             }
-            evaluateStage1Progress();
         }
 
         function selectCase2Subpath(subpath) {
             playSound('click');
-            appState.c2_selected_subpath = subpath;
+            const taskId = 's1c2';
+            if (appState.completedTasks[taskId]) { showNotification("คุณเคลียร์เคสนี้สำเร็จไปแล้วครับ", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
+            const attemptCount = appState.attempts[taskId];
+            const isCorrect = (subpath === 'C2' || subpath === 'D2');
             
             ['C1', 'C2', 'D1', 'D2'].forEach(s => {
                 const el = document.getElementById(`btn-c2-sub-${s}`);
                 if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition";
             });
-
-            const activeBtn = document.getElementById(`btn-c2-sub-${subpath}`);
-            if (activeBtn) activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
+            document.getElementById(`btn-c2-sub-${subpath}`).className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
 
             const feedbackDiv = document.getElementById('c2-feedback');
             feedbackDiv.classList.remove('hidden');
 
-            if (subpath === 'C1') {
-                feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ผิวบูรณะชำรุดเสียหาย!</strong> <p>APF Gel มีความเป็นกรดจัด จะไปกัดกร่อนสารเติมแก้วในเซรามิกและเรซินคอมโพสิตขอบรอยต่อฟันหน้าของคุณตา ทำให้สูญเสียความเงางามและติดคราบนิเวศฟันผุง่ายขึ้น</p>`;
-            } else if (subpath === 'C2') {
+            let msg = "";
+            if (subpath === 'C1') msg = "ผิวบูรณะชำรุดเสียหาย! APF Gel จะไปกัดกร่อนสารเติมแก้วในเซรามิกและเรซินคอมโพสิตทำให้สูญเสียความเงางาม";
+            if (subpath === 'C2') msg = "ยับยั้งโรคยอดเยี่ยม! 38% SDF มีประสิทธิภาพสูงสุดในการยับยั้งรากฟันผุ แต่อธิบายเรื่องคราบดำด้วย";
+            if (subpath === 'D1') msg = "ความเสี่ยงการสำลักสะสม! คนไข้ชรามีประวัติกลืนลำบาก การบ่มเจลล้นปริมาตรจะเพิ่มความเสี่ยงไหลตกลำคอสำลัก";
+            if (subpath === 'D2') msg = "ประยุกต์ได้ปลอดภัยสูงสุด! การแต้มทาเฉพาะจุดอย่างใจเย็นด้วยพู่กันจิ๋ว ช่วยปิดกั้นปัญหาสำลักสารลงคอ";
+
+            if (isCorrect) {
+                appState.completedTasks[taskId] = true; updateScore(5);
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ยับยั้งโรคยอดเยี่ยม!</strong> <p>38% SDF มีประสิทธิภาพสูงสุดในการยับยั้งผิวรากฟันผุ แต่อธิบายคุณตาเรื่องคราบปื้นสีดำถาวรก่อนรับการรักษานะครับ</p>`;
-            } else if (subpath === 'D1') {
+                feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-teal-600 font-bold">✨ ได้รับ 5 คะแนน (สิทธิ์ใช้ไป ${attemptCount}/3 ครั้ง)</p>`;
+                document.getElementById('btn-c2-path-C').disabled = true; document.getElementById('btn-c2-path-D').disabled = true;
+            } else {
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ความเสี่ยงการสำลักสะสม!</strong> <p>เนื่องจากคนไข้ชรามีประวัติกลืนลำบาก (Dysphagia) การบ่มเจลล้นปริมาตรจะเพิ่มความเสี่ยงไหลตกลำคอสำลักอุดกั้นทางเดินหายใจ</p>`;
-            } else if (subpath === 'D2') {
-                feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ประยุกต์ได้ปลอดภัยสูงสุด!</strong> <p>การแต้มทาเฉพาะจุดอย่างใจเย็นด้วยพู่กันจิ๋ว ช่วยคุมปริมาตรเนื้อสาร NaF ปิดกั้นปัญหาสำลักสารลงคอโดยสิ้นเชิง</p>`;
+                if (attemptCount >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-rose-600 font-bold">❌ ตอบผิดครบ 3 ครั้ง ระบบบันทึกว่าไม่ผ่านเคสนี้ (0 คะแนน)</p>`;
+                    document.getElementById('btn-c2-path-C').disabled = true; document.getElementById('btn-c2-path-D').disabled = true;
+                } else {
+                    feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-rose-600 font-bold">❌ ตอบผิด! เหลือสิทธิ์วิเคราะห์อีก ${3 - attemptCount} ครั้ง</p>`;
+                }
             }
             evaluateStage1Progress();
         }
 
-        // Case 3
         function selectCase3Path(path) {
             playSound('click');
-            appState.c3_selected_path = path;
-            
-            document.getElementById('btn-c3-path-E').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
-            document.getElementById('btn-c3-path-F').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
+            const taskId = 's1c3';
+            if (appState.completedTasks[taskId]) return;
+            document.getElementById('btn-c3-path-E').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl transition bg-white";
+            document.getElementById('btn-c3-path-F').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl transition bg-white";
+            document.getElementById(`btn-c3-path-${path}`).className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
+            document.getElementById('c3-round2-container').classList.remove('hidden');
 
-            const selectedBtn = document.getElementById(`btn-c3-path-${path}`);
-            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
-
-            const subContainer = document.getElementById('c3-round2-container');
             const subpathsDiv = document.getElementById('c3-subpaths');
-            subContainer.classList.remove('hidden');
-
             if (path === 'E') {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase3Subpath('E1')" id="btn-c3-sub-E1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง E1</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ยืนยันจ่ายยาเม็ดเพื่อเร่งผลโครงสร้างกระดูกและหน่อฟันหน้าแท้</span>
-                    </button>
-                    <button onclick="selectCase3Subpath('E2')" id="btn-c3-sub-E2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง E2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ตรวจเกณฑ์ปี 2560 และสลับแนวทางมางดจ่ายเสริม</span>
-                    </button>
+                    <button onclick="selectCase3Subpath('E1')" id="btn-c3-sub-E1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง E1</span><span class="text-[11px] text-slate-700 mt-0.5">ยืนยันจ่ายยาเม็ดเพื่อเร่งผลโครงสร้างกระดูกและหน่อฟันหน้าแท้</span></button>
+                    <button onclick="selectCase3Subpath('E2')" id="btn-c3-sub-E2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง E2</span><span class="text-[11px] text-slate-700 mt-0.5">ตรวจเกณฑ์ปี 2560 และสลับแนวทางมางดจ่ายเสริม</span></button>
                 `;
             } else {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase3Subpath('F1')" id="btn-c3-sub-F1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง F1</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">แนะนำผู้ปกครองบีบยาสีฟันขนาดเมล็ดข้าวโพด</span>
-                    </button>
-                    <button onclick="selectCase3Subpath('F2')" id="btn-c3-sub-F2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง F2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">บีบปริมาณแตะพอเปียก (Smear Layer) และคัดขจัดฟองส่วนเกินออก</span>
-                    </button>
+                    <button onclick="selectCase3Subpath('F1')" id="btn-c3-sub-F1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง F1</span><span class="text-[11px] text-slate-700 mt-0.5">แนะนำผู้ปกครองบีบยาสีฟันขนาดเมล็ดข้าวโพด</span></button>
+                    <button onclick="selectCase3Subpath('F2')" id="btn-c3-sub-F2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง F2</span><span class="text-[11px] text-slate-700 mt-0.5">บีบปริมาณแตะพอเปียก (Smear Layer) และคัดขจัดฟองส่วนเกินออก</span></button>
                 `;
             }
-            evaluateStage1Progress();
         }
 
         function selectCase3Subpath(subpath) {
             playSound('click');
-            appState.c3_selected_subpath = subpath;
+            const taskId = 's1c3';
+            if (appState.completedTasks[taskId]) { showNotification("คุณเคลียร์เคสนี้สำเร็จไปแล้วครับ", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
+            const attemptCount = appState.attempts[taskId];
+            const isCorrect = (subpath === 'E2' || subpath === 'F2');
             
             ['E1', 'E2', 'F1', 'F2'].forEach(s => {
                 const el = document.getElementById(`btn-c3-sub-${s}`);
                 if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition";
             });
-
-            const activeBtn = document.getElementById(`btn-c3-sub-${subpath}`);
-            if (activeBtn) activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
+            document.getElementById(`btn-c3-sub-${subpath}`).className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
 
             const feedbackDiv = document.getElementById('c3-feedback');
             feedbackDiv.classList.remove('hidden');
 
-            if (subpath === 'E1') {
-                feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ความเสี่ยงฟันตกกระวิกฤต!</strong> <p>ปริมาณน้ำดื่มมี F 0.5 ppm และเกณฑ์เด็ก 2 ปีกำหนดให้งดจ่ายยาเม็ดเสริม (เกณฑ์น้ำเกิน 0.3 ppm) การฝืนจ่ายเพิ่มจะทำให้ระดับ F เกินขีดส่งผลให้หน่อฟันหน้าบนแท้ขึ้นตกกระด่างขาวถาวร</p>`;
-            } else if (subpath === 'E2') {
+            let msg = "";
+            if (subpath === 'E1') msg = "ความเสี่ยงฟันตกกระวิกฤต! ปริมาณน้ำดื่มมี F 0.5 ppm ในเด็ก 2 ปีต้องงดจ่ายยาเม็ดเสริม (เกณฑ์เกิน 0.3) การฝืนจ่ายจะทำให้ฟันตกกระ";
+            if (subpath === 'E2') msg = "ยอดเยี่ยมอย่างนักระบาดวิทยา! การยึดถือมาตรฐานอย่างแม่นยำช่วยปกป้องเด็กจากสภาวะฟันตกกระ (Fluorosis) ได้เป็นเลิศ";
+            if (subpath === 'F1') msg = "ไม่ปลอดภัยในเด็กเล็ก! เด็กอายุต่ำกว่า 3 ปี ขนาดเมล็ดข้าวโพดจะล้นปริมาณเกินความปลอดภัยในเด็กวัยกลืนลำบาก";
+            if (subpath === 'F2') msg = "ปฏิบัติถูกต้องสมบูรณ์แบบ! การคุมสัดส่วนยาสีฟัน Smear layer ป้องกันฟันผุได้โดยไร้อันตรายจากการกลืนสาร";
+
+            if (isCorrect) {
+                appState.completedTasks[taskId] = true; updateScore(5);
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ยอดเยี่ยมอย่างนักระบาดวิทยา!</strong> <p>การยึดถือมาตรฐานอย่างแม่นยำช่วยปกป้องเด็กจากสภาวะฟันตกกระ (Fluorosis) ได้เป็นเลิศ</p>`;
-            } else if (subpath === 'F1') {
+                feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-teal-600 font-bold">✨ ได้รับ 5 คะแนน (สิทธิ์ใช้ไป ${attemptCount}/3 ครั้ง)</p>`;
+                document.getElementById('btn-c3-path-E').disabled = true; document.getElementById('btn-c3-path-F').disabled = true;
+            } else {
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ไม่ปลอดภัยในเด็กเล็ก!</strong> <p>สำหรับเด็กอายุต่ำกว่า 3 ปี แนะนำสัดส่วนเท่าเมล็ดข้าวสารหรือแตะพอเปียก (Smear Layer) เท่านั้น ขนาดเมล็ดข้าวโพดจะล้นปริมาณเกินความปลอดภัยในเด็กวัยกลืนลำบาก</p>`;
-            } else if (subpath === 'F2') {
-                feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ปฏิบัติถูกต้องสมบูรณ์แบบ!</strong> <p>การคุมสัดส่วนยาสีฟัน Smear layer ช่วยให้ฟันป้องกันฟันผุได้อย่างมีกลไกโดยปราศจากอันตรายจากการกลืนสาร</p>`;
+                if (attemptCount >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-rose-600 font-bold">❌ ตอบผิดครบ 3 ครั้ง ระบบบันทึกว่าไม่ผ่านเคสนี้ (0 คะแนน)</p>`;
+                    document.getElementById('btn-c3-path-E').disabled = true; document.getElementById('btn-c3-path-F').disabled = true;
+                } else {
+                    feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-rose-600 font-bold">❌ ตอบผิด! เหลือสิทธิ์วิเคราะห์อีก ${3 - attemptCount} ครั้ง</p>`;
+                }
             }
             evaluateStage1Progress();
         }
 
-        // Case 4
         function selectCase4Path(path) {
             playSound('click');
-            appState.c4_selected_path = path;
-            
-            document.getElementById('btn-c4-path-G').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
-            document.getElementById('btn-c4-path-H').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white";
+            const taskId = 's1c4';
+            if (appState.completedTasks[taskId]) return;
+            document.getElementById('btn-c4-path-G').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl transition bg-white";
+            document.getElementById('btn-c4-path-H').className = "flex flex-col text-left p-3 border border-slate-200 rounded-xl transition bg-white";
+            document.getElementById(`btn-c4-path-${path}`).className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
+            document.getElementById('c4-round2-container').classList.remove('hidden');
 
-            const selectedBtn = document.getElementById(`btn-c4-path-${path}`);
-            selectedBtn.className = "flex flex-col text-left p-3 border-2 border-indigo-600 rounded-xl transition bg-indigo-50/20";
-
-            const subContainer = document.getElementById('c4-round2-container');
             const subpathsDiv = document.getElementById('c4-subpaths');
-            subContainer.classList.remove('hidden');
-
             if (path === 'G') {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase4Subpath('G1')" id="btn-c4-sub-G1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง G1</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">บ่มเจลกรดทิ้งไว้ 4 นาทีหวังผลตกผลึกผิวรากฟันผุอย่างรวดเร็ว</span>
-                    </button>
-                    <button onclick="selectCase4Subpath('G2')" id="btn-c4-sub-G2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง G2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ระงับแนวทางเจลกรดเนื่องจากคนไข้เสียวฟันและผิวเนื้อฟันไวต่อสภาวะกรดจัด</span>
-                    </button>
+                    <button onclick="selectCase4Subpath('G1')" id="btn-c4-sub-G1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง G1</span><span class="text-[11px] text-slate-700 mt-0.5">บ่มเจลกรดทิ้งไว้ 4 นาทีหวังผลตกผลึกผิวรากฟันผุอย่างรวดเร็ว</span></button>
+                    <button onclick="selectCase4Subpath('G2')" id="btn-c4-sub-G2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง G2</span><span class="text-[11px] text-slate-700 mt-0.5">ระงับแนวทางเจลกรดเนื่องจากคนไข้เสียวฟันและผิวเนื้อฟันไวต่อสภาวะกรดจัด</span></button>
                 `;
             } else {
                 subpathsDiv.innerHTML = `
-                    <button onclick="selectCase4Subpath('H1')" id="btn-c4-sub-H1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง H1</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">ทาวาร์นิช 5% NaF บริเวณเหงือกร่นเสียว และสอนวิธีการงดแปรงฟัน 1 คืน</span>
-                    </button>
-                    <button onclick="selectCase4Subpath('H2')" id="btn-c4-sub-H2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl hover:border-indigo-500 bg-white transition">
-                        <span class="font-bold text-[10px] text-indigo-600">เส้นทาง H2</span>
-                        <span class="text-[11px] text-slate-700 mt-0.5">แนะนำให้ทายาสีฟันสมุนไพรลดเสียวฟันที่ไม่มีฟลูออไรด์</span>
-                    </button>
+                    <button onclick="selectCase4Subpath('H1')" id="btn-c4-sub-H1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง H1</span><span class="text-[11px] text-slate-700 mt-0.5">ทาวาร์นิช 5% NaF บริเวณเหงือกร่นเสียว และงดแปรงฟัน 1 คืน</span></button>
+                    <button onclick="selectCase4Subpath('H2')" id="btn-c4-sub-H2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง H2</span><span class="text-[11px] text-slate-700 mt-0.5">แนะนำให้ทายาสีฟันสมุนไพรลดเสียวฟันที่ไม่มีฟลูออไรด์</span></button>
                 `;
             }
-            evaluateStage1Progress();
         }
 
         function selectCase4Subpath(subpath) {
             playSound('click');
-            appState.c4_selected_subpath = subpath;
+            const taskId = 's1c4';
+            if (appState.completedTasks[taskId]) { showNotification("คุณเคลียร์เคสนี้สำเร็จไปแล้วครับ", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
+            const attemptCount = appState.attempts[taskId];
+            const isCorrect = (subpath === 'G2' || subpath === 'H1');
             
             ['G1', 'G2', 'H1', 'H2'].forEach(s => {
                 const el = document.getElementById(`btn-c4-sub-${s}`);
                 if (el) el.className = "flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white transition";
             });
-
-            const activeBtn = document.getElementById(`btn-c4-sub-${subpath}`);
-            if (activeBtn) activeBtn.className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
+            document.getElementById(`btn-c4-sub-${subpath}`).className = "flex flex-col text-left p-2.5 border-2 border-indigo-600 rounded-xl bg-indigo-50/20 transition";
 
             const feedbackDiv = document.getElementById('c4-feedback');
             feedbackDiv.classList.remove('hidden');
 
-            if (subpath === 'G1') {
-                feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: อาการเสียวฟันกระฉูดรุนแรง!</strong> <p>เจลกรด APF มีฤทธิ์เป็นกรดจัด (pH 3.0-3.5) เมื่อสัมผัสกับผิวเนื้อฟัน/รากฟัน (Dentin/Cementum) ที่เหงือกร่นจะยิ่งเปิดท่อเนื้อฟันและเพิ่มความระคายเคืองกระตุ้นอาการเสียวฟันเพิ่มขึ้นรุนแรง</p>`;
-            } else if (subpath === 'G2') {
+            let msg = "";
+            if (subpath === 'G1') msg = "อาการเสียวฟันกระฉูดรุนแรง! เจลกรด APF (pH 3.0-3.5) สัมผัสกับท่อเนื้อฟันที่เหงือกร่นจะยิ่งเพิ่มความระคายเคืองกระตุ้นอาการเสียวฟันอย่างรุนแรง";
+            if (subpath === 'G2') msg = "ป้องกันภัยสำเร็จ! การหยุดใช้เจลกรดช่วยระงับพยาธิสภาพกระตุ้นระบบประสาทประสาทเสียวฟันได้อย่างถูกต้อง";
+            if (subpath === 'H1') msg = "วิเคราะห์เยี่ยมยอดไร้เทียมทาน! วาร์นิช NaF เป็นกลางช่วยบล็อกท่อเนื้อฟัน และงดแปรง 1 คืนส่งผลให้เกราะผลึก FAP ตกตะกอนเสถียรที่สุด";
+            if (subpath === 'H2') msg = "ขาดกลไกตกตะกอน! การสลับไปแนะนำยาสีฟันที่ไม่มีฟลูออไรด์ส่งผลให้ผิวฟันขาดระบบฟื้นฟูแร่ธาตุคืนกลับ รอยสึกจะลุกลาม";
+
+            if (isCorrect) {
+                appState.completedTasks[taskId] = true; updateScore(5);
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ป้องกันภัยสำเร็จ!</strong> <p>การหยุดใช้เจลกรดช่วยระงับพยาธิสภาพกระตุ้นระบบประสาทประสาทเสียวฟันได้อย่างถูกต้อง</p>`;
-            } else if (subpath === 'H1') {
-                feedbackDiv.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: วิเคราะห์เยี่ยมยอดไร้เทียมทาน!</strong> <p>วาร์นิช NaF เป็นกลางและค้างอยู่บนผิวฟันช่วยบล็อกท่อเนื้อฟัน ลดการเสียวฟัน และการปฏิบัติตัวงดแปรง 1 คืนส่งผลให้เกราะผลึก FAP ตกตะกอนเสถียรที่สุด</p>`;
-            } else if (subpath === 'H2') {
+                feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-teal-600 font-bold">✨ ได้รับ 5 คะแนน (สิทธิ์ใช้ไป ${attemptCount}/3 ครั้ง)</p>`;
+                document.getElementById('btn-c4-path-G').disabled = true; document.getElementById('btn-c4-path-H').disabled = true;
+            } else {
                 feedbackDiv.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-800 animate-fadeIn space-y-1";
-                feedbackDiv.innerHTML = `<strong>ผลลัพธ์ทางคลินิก: ขาดกลไกตกตะกอน!</strong> <p>การสลับไปแนะนำยาสีฟันที่ไม่มีฟลูออไรด์ส่งผลให้ผิวฟันขาดระบบฟื้นฟูแร่ธาตุคืนกลับ รอยสึกเหงือกร่นจะพัฒนาเป็นฟันผุผิวรากฟันในระยะยาว</p>`;
+                if (attemptCount >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-rose-600 font-bold">❌ ตอบผิดครบ 3 ครั้ง ระบบบันทึกว่าไม่ผ่านเคสนี้ (0 คะแนน)</p>`;
+                    document.getElementById('btn-c4-path-G').disabled = true; document.getElementById('btn-c4-path-H').disabled = true;
+                } else {
+                    feedbackDiv.innerHTML = `<strong>ผลลัพธ์: ${msg}</strong><p class="mt-2 text-rose-600 font-bold">❌ ตอบผิด! เหลือสิทธิ์วิเคราะห์อีก ${3 - attemptCount} ครั้ง</p>`;
+                }
             }
             evaluateStage1Progress();
         }
 
         function evaluateStage1Progress() {
-            if (appState.c1_selected_subpath && appState.c2_selected_subpath && appState.c3_selected_subpath && appState.c4_selected_subpath) {
+            if (appState.completedTasks['s1c1'] && appState.completedTasks['s1c2'] && appState.completedTasks['s1c3'] && appState.completedTasks['s1c4']) {
                 appState.unlockedStages['stage2'] = true;
                 document.getElementById('stage1-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>ผ่านการวิเคราะห์ด่านที่ 1 ครบถ้วน!</strong> สามารถคลิกปุ่มสีเขียวด้านขวาเพื่อเข้าสู่ด่านถัดไปครับ";
                 document.getElementById('btn-next-stage1').classList.remove('hidden');
@@ -1554,178 +1716,243 @@
             }
         }
 
+        // --- STAGE 2 LOGIC (3 Attempts Limit) ---
         function validateSafetyCase1() {
+            const taskId = 's2c1';
+            if (appState.completedTasks[taskId]) { showNotification("คุณผ่านเคสการคำนวณนี้ไปแล้วครับ", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
             const mass = parseFloat(document.getElementById('calc-c1-mass').value);
             const fion = parseFloat(document.getElementById('calc-c1-fion').value);
             const ptd = parseFloat(document.getElementById('calc-c1-ptd').value);
             const status = document.getElementById('calc-c1-status').value;
 
-            const isMassCorrect = Math.abs(mass - 4.8) < 0.1;
-            const isFionCorrect = Math.abs(fion - 59.04) < 0.2;
-            const isPtdCorrect = Math.abs(ptd - 100) < 0.1;
-            const isStatusCorrect = status === 'safe';
+            const isCorrect = (Math.abs(mass - 4.8) < 0.1) && (Math.abs(fion - 59.04) < 0.2) && (Math.abs(ptd - 100) < 0.1) && (status === 'safe');
 
-            if (isMassCorrect && isFionCorrect && isPtdCorrect && isStatusCorrect) {
-                showNotification("คดีที่ 1 ถูกต้อง! มวลเจล 4.8g ไอออน F⁻ 59.04mg ยังไม่เกินขีด PTD 100mg");
-                evaluateStage2Progress();
+            if (isCorrect) {
+                appState.completedTasks[taskId] = true; updateScore(5);
+                showNotification(`คดีที่ 1 ถูกต้อง! มวลเจล 4.8g ไอออน F⁻ 59.04mg ไม่เกินขีด PTD ✨ รับ 5 คะแนน`);
+                document.getElementById('s2c1-container').classList.add('opacity-70', 'pointer-events-none');
             } else {
-                showNotification("คดีที่ 1 ยังคำนวณไม่ถูกต้อง ทบทวน: มวล = 4 * 1.2, F⁻ = มวล * 12.3, PTD = 5 * 20", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("คดีที่ 1 ตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('s2c1-container').classList.add('opacity-70', 'pointer-events-none');
+                } else {
+                    showNotification(`คดีที่ 1 ยังคำนวณไม่ถูกต้อง! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง (ทบทวน: มวล = 4 * 1.2, F⁻ = มวล * 12.3, PTD = 5 * 20)`, "fail");
+                }
             }
+            evaluateStage2Progress();
         }
 
         function validateSafetyCase2() {
+            const taskId = 's2c2';
+            if (appState.completedTasks[taskId]) { showNotification("คุณผ่านเคสการคำนวณนี้ไปแล้วครับ", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
             const nafmass = parseFloat(document.getElementById('calc-c2-nafmass').value);
             const fion = parseFloat(document.getElementById('calc-c2-fion').value);
             const ptd = parseFloat(document.getElementById('calc-c2-ptd').value);
             const status = document.getElementById('calc-c2-status').value;
 
-            const isNafCorrect = Math.abs(nafmass - 110) < 1.0;
-            const isFionCorrect = Math.abs(fion - 49.5) < 1.0;
-            const isPtdCorrect = Math.abs(ptd - 60) < 0.1;
-            const isStatusCorrect = status === 'safe';
+            const isCorrect = (Math.abs(nafmass - 110) < 1.0) && (Math.abs(fion - 49.5) < 1.0) && (Math.abs(ptd - 60) < 0.1) && (status === 'safe');
 
-            if (isNafCorrect && isFionCorrect && isPtdCorrect && isStatusCorrect) {
-                showNotification("คดีที่ 2 ถูกต้อง! NaF ในหลอดคือ 110mg ไอออน F⁻ จริง 49.5mg ยังไม่เกินขีด PTD 60mg");
-                evaluateStage2Progress();
+            if (isCorrect) {
+                appState.completedTasks[taskId] = true; updateScore(5);
+                showNotification(`คดีที่ 2 ถูกต้อง! NaF 110mg ไอออน F⁻ 49.5mg ไม่เกินขีด PTD ✨ รับ 5 คะแนน`);
+                document.getElementById('s2c2-container').classList.add('opacity-70', 'pointer-events-none');
             } else {
-                showNotification("คดีที่ 2 ยังคำนวณไม่ถูกต้อง ทบทวนสูตรจากคลังความรู้ซ้ายมือนะครับ", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("คดีที่ 2 ตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('s2c2-container').classList.add('opacity-70', 'pointer-events-none');
+                } else {
+                    showNotification(`คดีที่ 2 ยังคำนวณไม่ถูกต้อง! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง`, "fail");
+                }
             }
+            evaluateStage2Progress();
         }
 
         function validateSafetyCase3() {
+            const taskId = 's2c3';
+            if (appState.completedTasks[taskId]) { showNotification("คุณผ่านเคสการคำนวณนี้ไปแล้วครับ", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
             const nafmass = parseFloat(document.getElementById('calc-c3-nafmass').value);
             const fion = parseFloat(document.getElementById('calc-c3-fion').value);
             const ptd = parseFloat(document.getElementById('calc-c3-ptd').value);
             const status = document.getElementById('calc-c3-status').value;
 
-            const isNafCorrect = Math.abs(nafmass - 75) < 1.0;
-            const isFionCorrect = Math.abs(fion - 33.75) < 1.0;
-            const isPtdCorrect = Math.abs(ptd - 125) < 0.1;
-            const isStatusCorrect = status === 'safe';
+            const isCorrect = (Math.abs(nafmass - 75) < 1.0) && (Math.abs(fion - 33.75) < 1.0) && (Math.abs(ptd - 125) < 0.1) && (status === 'safe');
 
-            if (isNafCorrect && isFionCorrect && isPtdCorrect && isStatusCorrect) {
-                showNotification("คดีที่ 3 ถูกต้อง! NaF รวมคือ 75mg ไอออน F⁻ สุทธิ 33.75mg ห่างไกลขีดอันตราย PTD 125mg");
-                evaluateStage2Progress();
+            if (isCorrect) {
+                appState.completedTasks[taskId] = true; updateScore(5);
+                showNotification(`คดีที่ 3 ถูกต้อง! NaF 75mg ไอออน F⁻ 33.75mg ห่างไกล PTD ✨ รับ 5 คะแนน`);
+                document.getElementById('s2c3-container').classList.add('opacity-70', 'pointer-events-none');
             } else {
-                showNotification("คดีที่ 3 ยังไม่ถูกต้อง ตรวจสอบ: 150ml x 0.05% NaF = 75mg NaF", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("คดีที่ 3 ตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('s2c3-container').classList.add('opacity-70', 'pointer-events-none');
+                } else {
+                    showNotification(`คดีที่ 3 ยังคำนวณไม่ถูกต้อง! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง (150ml x 0.05% NaF = 75mg)`, "fail");
+                }
             }
+            evaluateStage2Progress();
         }
 
         function validateSafetyCase4() {
+            const taskId = 's2c4';
+            if (appState.completedTasks[taskId]) { showNotification("คุณผ่านเคสการคำนวณนี้ไปแล้วครับ", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
             const fion = parseFloat(document.getElementById('calc-c4-fion').value);
             const ptd = parseFloat(document.getElementById('calc-c4-ptd').value);
             const status = document.getElementById('calc-c4-status').value;
 
-            const isFionCorrect = Math.abs(fion - 20) < 0.1;
-            const isPtdCorrect = Math.abs(ptd - 75) < 0.1;
-            const isStatusCorrect = status === 'safe';
+            const isCorrect = (Math.abs(fion - 20) < 0.1) && (Math.abs(ptd - 75) < 0.1) && (status === 'safe');
 
-            if (isFionCorrect && isPtdCorrect && isStatusCorrect) {
-                showNotification("คดีที่ 4 ถูกต้อง! ไอออน F⁻ รวม 20mg น้อยกว่าขีดอันตราย PTD 75mg ปลอดภัยดี");
-                evaluateStage2Progress();
+            if (isCorrect) {
+                appState.completedTasks[taskId] = true; updateScore(5);
+                showNotification(`คดีที่ 4 ถูกต้อง! F⁻ รวม 20mg น้อยกว่า PTD 75mg ✨ รับ 5 คะแนน`);
+                document.getElementById('s2c4-container').classList.add('opacity-70', 'pointer-events-none');
             } else {
-                showNotification("คดีที่ 4 ยังไม่ถูกต้อง: เม็ดเสริมรวมมวลคือ 40 เม็ด x 0.5 mg = 20 mg", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("คดีที่ 4 ตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('s2c4-container').classList.add('opacity-70', 'pointer-events-none');
+                } else {
+                    showNotification(`คดีที่ 4 ยังคำนวณไม่ถูกต้อง! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง (40 เม็ด x 0.5 = 20)`, "fail");
+                }
             }
+            evaluateStage2Progress();
         }
 
         function evaluateStage2Progress() {
-            const c1_mass = parseFloat(document.getElementById('calc-c1-mass').value) || 0;
-            const c1_fion = parseFloat(document.getElementById('calc-c1-fion').value) || 0;
-            const c1_ptd = parseFloat(document.getElementById('calc-c1-ptd').value) || 0;
-            const c1_status = document.getElementById('calc-c1-status').value;
-
-            const c2_naf = parseFloat(document.getElementById('calc-c2-nafmass').value) || 0;
-            const c2_fion = parseFloat(document.getElementById('calc-c2-fion').value) || 0;
-            const c2_ptd = parseFloat(document.getElementById('calc-c2-ptd').value) || 0;
-            const c2_status = document.getElementById('calc-c2-status').value;
-
-            const c3_naf = parseFloat(document.getElementById('calc-c3-nafmass').value) || 0;
-            const c3_fion = parseFloat(document.getElementById('calc-c3-fion').value) || 0;
-            const c3_ptd = parseFloat(document.getElementById('calc-c3-ptd').value) || 0;
-            const c3_status = document.getElementById('calc-c3-status').value;
-
-            const c4_fion = parseFloat(document.getElementById('calc-c4-fion').value) || 0;
-            const c4_ptd = parseFloat(document.getElementById('calc-c4-ptd').value) || 0;
-            const c4_status = document.getElementById('calc-c4-status').value;
-
-            const isC1Valid = Math.abs(c1_mass - 4.8) < 0.1 && Math.abs(c1_fion - 59.04) < 0.2 && Math.abs(c1_ptd - 100) < 0.1 && c1_status === 'safe';
-            const isC2Valid = Math.abs(c2_naf - 110) < 1.0 && Math.abs(c2_fion - 49.5) < 1.0 && Math.abs(c2_ptd - 60) < 0.1 && c2_status === 'safe';
-            const isC3Valid = Math.abs(c3_naf - 75) < 1.0 && Math.abs(c3_fion - 33.75) < 1.0 && Math.abs(c3_ptd - 125) < 0.1 && c3_status === 'safe';
-            const isC4Valid = Math.abs(c4_fion - 20) < 0.1 && Math.abs(c4_ptd - 75) < 0.1 && c4_status === 'safe';
-
-            if (isC1Valid && isC2Valid && isC3Valid && isC4Valid) {
+            if (appState.completedTasks['s2c1'] && appState.completedTasks['s2c2'] && appState.completedTasks['s2c3'] && appState.completedTasks['s2c4']) {
                 appState.unlockedStages['stage3'] = true;
-                document.getElementById('stage2-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>วิเคราะห์ตรวจสอบคดีพิษวิทยาถูกต้องครบถ้วน!</strong> ปลดล็อกด่านที่ 3 สำเร็จแล้ว";
+                document.getElementById('stage2-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>เคลียร์คดีพิษวิทยาครบแล้ว!</strong> ปลดล็อกด่านที่ 3 สำเร็จแล้ว";
                 document.getElementById('btn-next-stage2').classList.remove('hidden');
                 document.getElementById('btn-next-stage2').classList.add('flex');
             }
         }
 
+        // --- STAGE 3 LOGIC (3 Attempts Limit) ---
         function validateMilkMission() {
+            const taskId = 's3m1';
+            if (appState.completedTasks[taskId]) { showNotification("คุณผ่านภารกิจนี้ไปแล้ว", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
             const ppm = parseFloat(document.getElementById('milk-ppm').value);
+            
             if (Math.abs(ppm - 2.5) < 0.05) {
-                showNotification("ภารกิจที่ 3.1 ถูกต้อง! ความเข้มข้นควรคุมไว้ที่ 2.5 ppm เพื่อมอบ F⁻ 0.5 mg ต่อ 200 ml");
-                appState.answers.milk_ppm_verified = true;
-                evaluateStage3Progress();
+                appState.completedTasks[taskId] = true; updateScore(5);
+                showNotification("ภารกิจที่ 3.1 ถูกต้อง! ความเข้มข้นที่ 2.5 ppm รับ 5 คะแนน");
+                document.getElementById('btn-s3m1').disabled = true;
+                document.getElementById('btn-s3m1').classList.add('opacity-50');
             } else {
-                showNotification("ภารกิจที่ 3.1 คำนวณผิดพลาด ทบทวน: 0.5 mg สารในน้ำนม 0.2 ลิตร คือกี่ ppm?", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("ภารกิจที่ 3.1 ตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('btn-s3m1').disabled = true; document.getElementById('btn-s3m1').classList.add('opacity-50');
+                } else {
+                    showNotification(`ภารกิจที่ 3.1 ผิดพลาด! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง (0.5 mg สารในนม 0.2 L คือกี่ ppm?)`, "fail");
+                }
             }
+            evaluateStage3Progress();
         }
 
         function validateDryBrushRules() {
+            const taskId = 's3m2';
+            if (appState.completedTasks[taskId]) { showNotification("คุณผ่านภารกิจนี้ไปแล้ว", "fail"); return; }
+            
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
             const r1 = document.getElementById('dry-brush-rule-1').value.trim();
             const r2 = document.getElementById('dry-brush-rule-2').value.trim();
             const r3 = document.getElementById('dry-brush-rule-3').value.trim();
 
             if (r1.length > 3 && r2.length > 3 && r3.length > 3) {
-                showNotification("ภารกิจที่ 3.2 บันทึกร่างแปรงฟันแห้งของคุณผ่านการอนุมัติเพื่อประกาศหน้าเสาธง!");
-                appState.answers.dry_brush_rules_verified = true;
-                evaluateStage3Progress();
+                appState.completedTasks[taskId] = true; updateScore(5);
+                showNotification("ภารกิจที่ 3.2 อนุมัติกฎการแปรงฟันแห้งสำเร็จ รับ 5 คะแนน!");
+                document.getElementById('btn-s3m2').disabled = true; document.getElementById('btn-s3m2').classList.add('opacity-50');
             } else {
-                showNotification("กรุณากรอกนโยบายให้ครบถ้วนทั้ง 3 ข้อเพื่อความปลอดภัยของเด็กนะครับ", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("ภารกิจที่ 3.2 ตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('btn-s3m2').disabled = true; document.getElementById('btn-s3m2').classList.add('opacity-50');
+                } else {
+                    showNotification(`กรุณากรอกนโยบายให้ครบ 3 ข้อให้มีเนื้อหา! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง`, "fail");
+                }
             }
+            evaluateStage3Progress();
         }
 
         function validateMission33() {
+            const taskId = 's3m3';
+            if (appState.completedTasks[taskId]) { showNotification("คุณผ่านภารกิจนี้ไปแล้ว", "fail"); return; }
+            
             const chosen = document.querySelector('input[name="mission33-ans"]:checked');
-            if (!chosen) {
-                showNotification("กรุณาเลือกมาตรการในภารกิจที่ 3.3 ก่อนส่งครับ", "fail");
-                return;
-            }
+            if (!chosen) { showNotification("กรุณาเลือกคำตอบ", "fail"); return; }
+
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
+
             if (chosen.value === 'ro') {
-                showNotification("ภารกิจที่ 3.3 ถูกต้อง! การกรอง RO ช่วยลดความเสี่ยงฟันตกกระ (Fluorosis) ได้มีประสิทธิภาพสูงสุด");
-                appState.answers.mission33_verified = true;
-                evaluateStage3Progress();
+                appState.completedTasks[taskId] = true; updateScore(5);
+                showNotification("ภารกิจที่ 3.3 ถูกต้อง! กรอง RO ลดเสี่ยงฟันตกกระ รับ 5 คะแนน");
+                document.getElementById('btn-s3m3').disabled = true; document.getElementById('btn-s3m3').classList.add('opacity-50');
             } else {
-                showNotification("ภารกิจที่ 3.3 ยังไม่ถูกต้อง: การจ่ายยาเม็ดเสริมขณะที่น้ำมีฟลูออไรด์ 1.8 ppm จะยิ่งเร่งฟันตกกระ", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("ภารกิจที่ 3.3 ตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('btn-s3m3').disabled = true; document.getElementById('btn-s3m3').classList.add('opacity-50');
+                } else {
+                    showNotification(`ภารกิจที่ 3.3 ผิดพลาด! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง (การจ่ายยาเม็ดเสริมขณะที่น้ำมีฟลูออไรด์ 1.8 ppm จะยิ่งเร่งฟันตกกระ)`, "fail");
+                }
             }
+            evaluateStage3Progress();
         }
 
         function validateMission34() {
+            const taskId = 's3m4';
+            if (appState.completedTasks[taskId]) { showNotification("คุณผ่านภารกิจนี้ไปแล้ว", "fail"); return; }
+            
             const chosen = document.querySelector('input[name="mission34-ans"]:checked');
-            if (!chosen) {
-                showNotification("กรุณาเลือกมาตรการในภารกิจที่ 3.4 ก่อนส่งครับ", "fail");
-                return;
-            }
+            if (!chosen) { showNotification("กรุณาเลือกคำตอบ", "fail"); return; }
+
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
+
             if (chosen.value === 'varnish') {
-                showNotification("ภารกิจที่ 3.4 ถูกต้อง! NaF Varnish มีความปลอดภัยสูงที่สุดและควบคุมกลืนได้ง่ายและดีกว่าเจล");
-                appState.answers.mission34_verified = true;
-                evaluateStage3Progress();
+                appState.completedTasks[taskId] = true; updateScore(5);
+                showNotification("ภารกิจที่ 3.4 ถูกต้อง! NaF Varnish ปลอดภัยจากการกลืน รับ 5 คะแนน");
+                document.getElementById('btn-s3m4').disabled = true; document.getElementById('btn-s3m4').classList.add('opacity-50');
             } else {
-                showNotification("ภารกิจที่ 3.4 ยังไม่ถูกต้อง: หลีกเลี่ยง APF Gel ในกลุ่มเด็กปฐมวัยเคลื่อนที่เนื่องจากคุมปริมาณกลืนไม่ได้", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("ภารกิจที่ 3.4 ตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('btn-s3m4').disabled = true; document.getElementById('btn-s3m4').classList.add('opacity-50');
+                } else {
+                    showNotification(`ภารกิจที่ 3.4 ผิดพลาด! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง (หลีกเลี่ยง APF Gel ในเด็กเล็กคุมกลืนไม่ได้)`, "fail");
+                }
             }
+            evaluateStage3Progress();
         }
 
         function evaluateStage3Progress() {
-            if (appState.answers.milk_ppm_verified && appState.answers.dry_brush_rules_verified && appState.answers.mission33_verified && appState.answers.mission34_verified) {
+            if (appState.completedTasks['s3m1'] && appState.completedTasks['s3m2'] && appState.completedTasks['s3m3'] && appState.completedTasks['s3m4']) {
                 appState.unlockedStages['stage4'] = true;
-                document.getElementById('stage3-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>วางแผนทันตสาธารณสุขชุมชนถูกต้องครบถ้วน!</strong> ปลดล็อกด่านที่ 4 สำเร็จแล้ว";
+                document.getElementById('stage3-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>วางแผนทันตสาธารณสุขชุมชนครบถ้วน!</strong> ปลดล็อกด่านที่ 4 สำเร็จแล้ว";
                 document.getElementById('btn-next-stage3').classList.remove('hidden');
                 document.getElementById('btn-next-stage3').classList.add('flex');
             }
         }
 
+        // --- STAGE 4 LOGIC (3 Attempts Limit) ---
         function validateMolecularMatch() {
+            const taskId = 's4m1';
+            if (appState.completedTasks[taskId]) { showNotification("คุณเคลียร์ด่านกลไกโมเลกุลแล้ว", "fail"); return; }
+
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
+
             const crystal1 = document.getElementById('mol-crystal-1').value;
             const ph1 = document.getElementById('mol-ph-1').value;
             const crystal2 = document.getElementById('mol-crystal-2').value;
@@ -1738,77 +1965,72 @@
             const bacteria8 = document.getElementById('mol-bacteria-8').value;
 
             const isCorrect = (
-                crystal1 === 'ha' && ph1 === '5.5' && 
-                crystal2 === 'fap' && ph2 === '4.5' && 
-                chem3 === 'hf' && enzyme4 === 'enolase' &&
-                crystal5 === 'caf2' && ion6 === 'ca' &&
+                crystal1 === 'ha' && ph1 === '5.5' && crystal2 === 'fap' && ph2 === '4.5' && 
+                chem3 === 'hf' && enzyme4 === 'enolase' && crystal5 === 'caf2' && ion6 === 'ca' &&
                 chem7 === 'silver' && bacteria8 === 'mutans'
             );
 
             if (isCorrect) {
-                showNotification("ยอดเยี่ยมมาก! อธิบายรายละเอียดชีวเคมีและกลไกระดับเซลล์ได้ถูกต้อง ปลดล็อกด่านสุดท้ายสำเร็จ");
-                appState.answers.molecular_match_verified = true;
+                appState.completedTasks[taskId] = true; updateScore(10);
+                showNotification("ยอดเยี่ยมมาก! กลไกโมเลกุลถูกต้อง รับ 10 คะแนน");
+                document.getElementById('btn-s4m1').disabled = true; document.getElementById('btn-s4m1').classList.add('opacity-50');
+                
                 appState.unlockedStages['stage5'] = true;
                 document.getElementById('stage4-progress-lbl').innerHTML = "🎉 <strong class='text-emerald-600'>ปลดล็อกสำเร็จ!</strong> คุณอธิบายกลไกได้ครบถ้วนแล้ว คลิกไปลุยด่าน 5 ได้เลยครับ";
                 document.getElementById('btn-next-stage4').classList.remove('hidden');
                 document.getElementById('btn-next-stage4').classList.add('flex');
             } else {
-                showNotification("ยังมีช่องกลไกจำแนกผิดพลาด ตรวจสอบประเด็นผลตกตะกอน CaF2 และ 銀 (Silver) ใน SDF อีกครั้งนะครับ", "fail");
+                if (appState.attempts[taskId] >= 3) {
+                    appState.completedTasks[taskId] = true;
+                    showNotification("ภารกิจโมเลกุลตอบผิดครบ 3 ครั้ง ระบบบันทึกไม่ผ่าน", "fail");
+                    document.getElementById('btn-s4m1').disabled = true; document.getElementById('btn-s4m1').classList.add('opacity-50');
+                    
+                    appState.unlockedStages['stage5'] = true;
+                    document.getElementById('stage4-progress-lbl').innerHTML = "<strong class='text-rose-600'>สิ้นสุดการวิเคราะห์ด่าน 4!</strong> คลิกไปลุยด่าน 5 ต่อได้เลยครับ";
+                    document.getElementById('btn-next-stage4').classList.remove('hidden');
+                    document.getElementById('btn-next-stage4').classList.add('flex');
+                } else {
+                    showNotification(`ยังจำแนกผิดพลาด! เหลือสิทธิ์ ${3 - appState.attempts[taskId]} ครั้ง (ตรวจสอบประเด็น CaF2 และ Silver)`, "fail");
+                }
             }
         }
 
-        function renderMCQs() {
-            const container = document.getElementById('mcqs-container');
-            container.innerHTML = '';
-
-            mcqDatabase.forEach((q, idx) => {
-                const qDiv = document.createElement('div');
-                qDiv.className = "bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3";
-                qDiv.innerHTML = `
-                    <div class="font-bold text-xs sm:text-sm text-slate-900 flex items-start gap-2">
-                        <span class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center text-[11px] shrink-0 font-bold">${idx + 1}</span>
-                        <span>${q.question}</span>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-8">
-                        ${q.choices.map((c, cIdx) => `
-                            <button onclick="selectChoice(${q.id}, ${cIdx})" id="btn-choice-${q.id}-${cIdx}" class="w-full text-left p-3 border border-slate-200 hover:border-indigo-500 rounded-xl text-xs transition bg-white font-medium focus:outline-none">
-                                ${c}
-                            </button>
-                        `).join('')}
-                    </div>
-                    <div id="explanation-${q.id}" class="hidden p-4 bg-emerald-50 border border-emerald-100 rounded-xl text-[11px] text-slate-700 pl-8 space-y-1 animate-fadeIn">
-                        <div class="font-bold text-emerald-900 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> เฉลยอภิปรายโดยทันตสาธารณสุข:</div>
-                        <div class="leading-relaxed">${q.explanation}</div>
-                    </div>
-                `;
-                container.appendChild(qDiv);
-            });
-        }
-
-        function selectChoice(questionId, choiceIndex) {
-            playSound('click');
-            appState.answers.quiz_answers[questionId] = choiceIndex;
-            
-            for (let i = 0; i < 4; i++) {
-                const el = document.getElementById(`btn-choice-${questionId}-${i}`);
-                if (el) el.className = "w-full text-left p-3 border border-slate-200 hover:border-indigo-500 rounded-xl text-xs transition bg-white font-medium focus:outline-none";
-            }
-
-            const chosen = document.getElementById(`btn-choice-${questionId}-${choiceIndex}`);
-            if (chosen) {
-                chosen.className = "w-full text-left p-3 border-2 border-indigo-500 rounded-xl text-xs transition bg-indigo-50/10 font-bold focus:outline-none";
-            }
-        }
-
+        // --- STAGE 5 (MCQs) LOGIC (3 Attempts limit for full submit) ---
         function submitQuiz() {
             playSound('click');
+            const taskId = 's5quiz';
+            
+            if (appState.completedTasks[taskId]) {
+                showNotification("คุณส่งคำตอบแบบทดสอบนี้เสร็จสิ้นไปแล้วครับ", "fail"); return;
+            }
+
             let score = 0;
             let answeredCount = 0;
+            mcqDatabase.forEach(q => {
+                if (appState.answers.quiz_answers[q.id] !== undefined) answeredCount++;
+            });
+
+            if (answeredCount < mcqDatabase.length) {
+                showNotification("กรุณาเลือกคำตอบให้ครบทั้ง 10 ข้อก่อนส่งผลงานนะครับ", "fail");
+                return;
+            }
+
+            appState.attempts[taskId] = (appState.attempts[taskId] || 0) + 1;
+            const attemptCount = appState.attempts[taskId];
 
             mcqDatabase.forEach(q => {
-                const userAns = appState.answers.quiz_answers[q.id];
-                if (userAns !== undefined) {
-                    answeredCount++;
+                if (appState.answers.quiz_answers[q.id] === q.correctIndex) {
+                    score++;
+                }
+            });
+
+            if (score === mcqDatabase.length || attemptCount >= 3) {
+                // Final calculation and reveal
+                appState.completedTasks[taskId] = true;
+                updateScore(score * 3); // 3 points per question
+
+                mcqDatabase.forEach(q => {
+                    const userAns = appState.answers.quiz_answers[q.id];
                     document.getElementById(`explanation-${q.id}`).classList.remove('hidden');
                     
                     for (let i = 0; i < 4; i++) {
@@ -1821,77 +2043,29 @@
                             }
                         }
                     }
+                });
 
-                    if (userAns === q.correctIndex) {
-                        score++;
-                    }
-                }
-            });
+                document.getElementById('quiz-score-badge').classList.remove('hidden');
+                document.getElementById('quiz-score-val').innerText = score;
+                document.getElementById('btn-submit-quiz').classList.add('hidden');
+                document.getElementById('s5-progress-lbl').innerText = "คำตอบของคุณถูกส่งเรียบร้อยแล้ว เตรียมรับใบประกาศ";
 
-            if (answeredCount < mcqDatabase.length) {
-                showNotification("กรุณาทำข้อสอบให้ครบทั้ง 10 ข้อก่อนกดปุ่มเสร็จสิ้นส่งผลงานนะครับ", "fail");
-                return;
+                // Setup Certificate
+                const finalLevel = getExpertiseLevel(appState.totalScore);
+                document.getElementById('cert-student-name').innerText = "ทันตสาธารณสุขผู้มุ่งมั่น";
+                document.getElementById('cert-score').innerHTML = `${appState.totalScore}/100 <br><span class="text-sm mt-1 font-bold ${finalLevel.color}">${finalLevel.label}</span>`;
+                const today = new Date();
+                document.getElementById('cert-date').innerText = today.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                appState.unlockedStages['cert'] = true;
+                showNotification(`ส่งคำตอบสมบูรณ์! ได้คะแนน ${score}/10 ข้อ รับ ${score*3} คะแนนสะสม`);
+                
+                setTimeout(() => {
+                    switchStage('cert');
+                }, 2000);
+            } else {
+                showNotification(`คุณตอบถูก ${score}/10 ข้อ! เหลือสิทธิ์แก้มืออีก ${3 - attemptCount} ครั้ง`, "fail");
             }
-
-            document.getElementById('quiz-score-badge').classList.remove('hidden');
-            document.getElementById('quiz-score-val').innerText = score;
-
-            document.getElementById('cert-student-name').innerText = "ทันตสาธารณสุขผู้มุ่งมั่น";
-            document.getElementById('cert-score').innerText = `${score}/10`;
-            const today = new Date();
-            document.getElementById('cert-date').innerText = today.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-
-            appState.unlockedStages['cert'] = true;
-            showNotification(`เสร็จสิ้นกิจกรรม! ส่งคำตอบเสร็จสมบูรณ์ ได้คะแนน ${score}/10 คะแนน`);
-            
-            setTimeout(() => {
-                switchStage('cert');
-            }, 1500);
-        }
-
-        function renderEditorMCQs() {
-            const listDiv = document.getElementById('editor-mcqs-list');
-            listDiv.innerHTML = '';
-
-            mcqDatabase.forEach((q, idx) => {
-                const qBlock = document.createElement('div');
-                qBlock.className = "border border-slate-200 p-4 rounded-2xl bg-white space-y-3";
-                qBlock.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-                        <span class="font-bold text-slate-700">ข้อที่ ${idx + 1}</span>
-                    </div>
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-bold text-slate-500 block">โจทย์คำถาม:</label>
-                        <textarea id="edit-q-text-${q.id}" class="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none" rows="2">${q.question}</textarea>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        ${q.choices.map((c, cIdx) => `
-                            <div class="space-y-1">
-                                <label class="text-[10px] font-semibold text-slate-400 block">ตัวเลือกที่ ${cIdx + 1} ${cIdx === q.correctIndex ? '(คำตอบที่ถูกต้อง)' : ''}:</label>
-                                <input type="text" id="edit-q-choice-${q.id}-${cIdx}" class="w-full p-2 text-xs border border-slate-200 rounded-xl outline-none" value="${c}">
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                listDiv.appendChild(qBlock);
-            });
-        }
-
-        function openEditorModal() {
-            playSound('click');
-            document.getElementById('modal-editor').classList.remove('hidden');
-            document.getElementById('modal-editor').classList.add('flex');
-        }
-
-        function closeEditorModal() {
-            playSound('click');
-            document.getElementById('modal-editor').classList.remove('flex');
-            document.getElementById('modal-editor').classList.add('hidden');
-        }
-
-        function printCert() {
-            playSound('click');
-            window.print();
         }
     </script>
 </body>
