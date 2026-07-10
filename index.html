@@ -930,6 +930,13 @@
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtxInstance = null;
 
+        // 🔒 SECURITY CONFIGURATION (Hardcoded Flag)
+        // เปลี่ยนค่าเป็น false: สำหรับผู้ดูแล (Admin) เพื่อแก้ไขข้อสอบ
+        // เปลี่ยนค่าเป็น true: สำหรับผู้เล่น (Player) จะปิดตายโหมดผู้สร้าง ลบ DOM และเพิกเฉยต่อ URL
+        const SECURITY_CONFIG = {
+            IS_STRICT_PLAYER_MODE: true 
+        };
+
         function playSound(type) {
             try {
                 if (!audioCtxInstance) {
@@ -1123,11 +1130,38 @@
 
         window.onload = function() {
             parseUrlParams();
+            initSecurity(); // เรียกใช้ระบบความปลอดภัยเพื่อทำลาย DOM ของผู้สร้างหากถูกล็อค
             renderMCQs();
-            renderEditorMCQs();
+            
+            // เรนเดอร์หน้าต่างแก้ไขเฉพาะเมื่อไม่ได้เปิดโหมด Strict Player
+            if (!SECURITY_CONFIG.IS_STRICT_PLAYER_MODE) {
+                renderEditorMCQs();
+            }
+            
             updateUI();
             checkStageLocks();
         };
+
+        // ล็อกส่วน Editor ถาวรในโหมดผู้เล่น (Hardcoded Security)
+        function initSecurity() {
+            if (SECURITY_CONFIG.IS_STRICT_PLAYER_MODE || appState.mode === 'player') {
+                // 1. ลบ DOM element ของแผงควบคุมออกถาวร (ตามที่คุณเสนอ)
+                const editorTools = document.getElementById('panel-creator-tools');
+                if (editorTools) editorTools.remove();
+                
+                // 2. ลบปุ่มสลับโหมดบน Header
+                const toggleBtn = document.getElementById('btn-toggle-editor');
+                if (toggleBtn) toggleBtn.remove();
+                
+                // 3. ลบ Modal Editor ทั้งชุดออกจาก HTML ป้องกันการ Inspect
+                const editorModal = document.getElementById('modal-editor');
+                if (editorModal) editorModal.remove();
+                
+                // 4. Override (เขียนทับ) ฟังก์ชันที่เกี่ยวข้องกับการเข้าถึง Editor
+                window.openEditorModal = () => showNotification("สิทธิ์ถูกปฏิเสธ: พื้นที่นี้สงวนไว้สำหรับผู้ดูแลระบบ", "fail");
+                window.toggleMainMode = () => showNotification("สิทธิ์ถูกปฏิเสธ", "fail");
+            }
+        }
 
         function parseUrlParams() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1145,10 +1179,17 @@
                     showNotification("เกิดข้อผิดพลาดในการโหลดข้อสอบที่แชร์ ระบบจะใช้ข้อสอบมาตรฐาน", "fail");
                 }
             }
-            if (playMode === 'true' || window.location.hash === '#play') {
+            
+            // ใช้ Hardcoded Flag ควบคุมสิทธิ์ขั้นเด็ดขาดแทน URL
+            if (SECURITY_CONFIG.IS_STRICT_PLAYER_MODE) {
                 appState.mode = 'player';
             } else {
-                appState.mode = 'creator';
+                // หาก Admin ปลดล็อค Flag แล้ว จึงจะยอมให้อ่านจาก URL ได้
+                if (playMode === 'true' || window.location.hash === '#play') {
+                    appState.mode = 'player';
+                } else {
+                    appState.mode = 'creator';
+                }
             }
         }
 
@@ -1385,38 +1426,6 @@
             checkStageLocks();
         }
 
-        function checkStageLocks() {
-            const tabs = ['stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
-            tabs.forEach(t => {
-                // จัดการ Navigation Tabs ด้านบน
-                const el = document.getElementById(`tab-${t}`);
-                if (el) {
-                    if (appState.mode === 'player' && !appState.unlockedStages[t]) {
-                        el.classList.add('disabled-tab');
-                        el.title = "กรุณาทำภารกิจก่อนหน้าเพื่อปลดล็อก";
-                    } else {
-                        el.classList.remove('disabled-tab');
-                        el.title = "";
-                    }
-                }
-                
-                // จัดการล็อคการ์ดบนหน้า Home Screen (เพิ่ม Lock Overlay)
-                const cardEl = document.getElementById(`card-${t}`);
-                const lockOverlay = document.getElementById(`lock-overlay-${t}`);
-                if (cardEl) {
-                    if (appState.mode === 'player' && !appState.unlockedStages[t]) {
-                        cardEl.classList.add('opacity-60', 'cursor-not-allowed', 'bg-slate-50/50');
-                        cardEl.classList.remove('cursor-pointer', 'hover:shadow-md');
-                        if(lockOverlay) lockOverlay.classList.remove('hidden');
-                    } else {
-                        cardEl.classList.remove('opacity-60', 'cursor-not-allowed', 'bg-slate-50/50');
-                        cardEl.classList.add('cursor-pointer', 'hover:shadow-md');
-                        if(lockOverlay) lockOverlay.classList.add('hidden');
-                    }
-                }
-            });
-        }
-
         function updateUI() {
             const badgeCreator = document.getElementById('badge-mode-creator');
             const badgePlayer = document.getElementById('badge-mode-player');
@@ -1424,15 +1433,15 @@
             const btnToggle = document.getElementById('btn-toggle-editor');
 
             if (appState.mode === 'player') {
-                badgeCreator.classList.add('hidden');
-                badgePlayer.classList.remove('hidden');
-                panelTools.classList.add('hidden');
-                btnToggle.classList.add('hidden');
+                if(badgeCreator) badgeCreator.classList.add('hidden');
+                if(badgePlayer) badgePlayer.classList.remove('hidden');
+                if(panelTools) panelTools.classList.add('hidden');
+                if(btnToggle) btnToggle.classList.add('hidden');
             } else {
-                badgeCreator.classList.remove('hidden');
-                badgePlayer.classList.add('hidden');
-                panelTools.classList.remove('hidden');
-                btnToggle.classList.remove('hidden');
+                if(badgeCreator) badgeCreator.classList.remove('hidden');
+                if(badgePlayer) badgePlayer.classList.add('hidden');
+                if(panelTools) panelTools.classList.remove('hidden');
+                if(btnToggle) btnToggle.classList.remove('hidden');
             }
         }
 
