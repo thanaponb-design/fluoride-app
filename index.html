@@ -308,7 +308,7 @@
                             <div class="choice-pair grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <button onclick="selectCase4Path('G')" id="btn-c4-path-G" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง G</span>
-                                    <span class="text-xs text-slate-700 mt-1 font-semibold">เลือกใช้ 1.23% APF Gel เคลือบทั่วช่องปาก</span>
+                                    <span class="text-xs text-slate-700 mt-1 font-semibold">เลือกใช้ 1.23% APF Gel บ่มเคลือบทั่วช่องปาก</span>
                                 </button>
                                 <button onclick="selectCase4Path('H')" id="btn-c4-path-H" class="flex flex-col text-left p-3 border border-slate-200 rounded-xl hover:border-indigo-500 transition bg-white">
                                     <span class="font-bold text-xs text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-circle-chevron-right"></i> เส้นทาง H</span>
@@ -539,6 +539,47 @@
         // Web Audio API for gamified sounds
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtxInstance = null;
+
+        function playSound(type = 'click') {
+            try {
+                if (!audioCtxInstance) audioCtxInstance = new AudioCtx();
+                if (audioCtxInstance.state === 'suspended') audioCtxInstance.resume();
+
+                const ctx = audioCtxInstance;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                const now = ctx.currentTime;
+                if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(783.99, now + 0.1);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'fail') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(200, now);
+                    osc.frequency.exponentialRampToValueAtTime(80, now + 0.25);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                }
+            } catch (e) {
+                // เบราว์เซอร์บางตัว/บางสถานการณ์อาจเล่นเสียงไม่ได้ ไม่ควรทำให้ฟังก์ชันหลักของเกมหยุดทำงาน
+            }
+        }
 
         // --- GLOBAL STATE ---
         let appState = {
@@ -815,7 +856,7 @@
             if (path === 'C') {
                 subpathsDiv.innerHTML = renderShuffledPair(`<button onclick="selectCase2Subpath('C1')" id="btn-c2-sub-C1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง C1</span><span class="text-[11px] text-slate-700 mt-0.5">ทาเจลกรดให้ทั่วช่องปากรวมถึงขอบครอบฟันเซรามิก</span></button>`, `<button onclick="selectCase2Subpath('C2')" id="btn-c2-sub-C2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง C2</span><span class="text-[11px] text-slate-700 mt-0.5">ปรับใช้สาร 38% SDF ทาเคลือบระงับผิวรากฟันผุเฉพาะจุด</span></button>`);
             } else {
-                subpathsDiv.innerHTML = renderShuffledPair(`<button onclick="selectCase2Subpath('D1')" id="btn-c2-sub-D1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง D1</span><span class="text-[11px] text-slate-700 mt-0.5">บีบเจล 2% NaF แบบเข้มข้นใส่ล้นถาดพิมพ์ฟัน</span></button>`, `<button onclick="selectCase2Subpath('D2')" id="btn-c2-sub-D2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง D2</span><span class="text-[11px] text-slate-700 mt-0.5">ใช้พู่กันจิ๋ว (Microbrush) บรรจงแต้มทาควบคุมปริมาตร</span></button>`);
+                subpathsDiv.innerHTML = renderShuffledPair(`<button onclick="selectCase2Subpath('D1')" id="btn-c2-sub-D1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง D1</span><span class="text-[11px] text-slate-700 mt-0.5">บ่มเจล NaF หนาแน่นแบบใส่ล้นถาดพิมพ์ฟัน</span></button>`, `<button onclick="selectCase2Subpath('D2')" id="btn-c2-sub-D2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง D2</span><span class="text-[11px] text-slate-700 mt-0.5">ใช้พู่กันจิ๋ว (Microbrush) บรรจงแต้มทาควบคุมปริมาตร</span></button>`);
             }
         }
 
@@ -840,7 +881,7 @@
             let msg = "";
             if (subpath === 'C1') msg = "ผิวบูรณะชำรุดเสียหาย! APF Gel จะไปกัดกร่อนสารเติมแก้วในเซรามิกและเรซินคอมโพสิตทำให้สูญเสียความเงางาม";
             if (subpath === 'C2') msg = "ยับยั้งโรคยอดเยี่ยม! 38% SDF มีประสิทธิภาพสูงสุดในการยับยั้งรากฟันผุ แต่อธิบายเรื่องคราบดำด้วย";
-            if (subpath === 'D1') msg = "ความเสี่ยงการสำลักสะสม! คนไข้ชรามีประวัติกลืนลำบาก การบีบเจลล้นปริมาตรจะเพิ่มความเสี่ยงไหลตกลำคอสำลัก";
+            if (subpath === 'D1') msg = "ความเสี่ยงการสำลักสะสม! คนไข้ชรามีประวัติกลืนลำบาก การบ่มเจลล้นปริมาตรจะเพิ่มความเสี่ยงไหลตกลำคอสำลัก";
             if (subpath === 'D2') msg = "ประยุกต์ได้ปลอดภัยสูงสุด! การแต้มทาเฉพาะจุดอย่างใจเย็นด้วยพู่กันจิ๋ว ช่วยปิดกั้นปัญหาสำลักสารลงคอ";
 
             if (isCorrect) {
@@ -931,9 +972,9 @@
 
             const subpathsDiv = document.getElementById('c4-subpaths');
             if (path === 'G') {
-                subpathsDiv.innerHTML = renderShuffledPair(`<button onclick="selectCase4Subpath('G1')" id="btn-c4-sub-G1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง G1</span><span class="text-[11px] text-slate-700 mt-0.5">บีบเจลกรดทิ้งไว้ 4 นาทีหวังผลตกผลึกผิวรากฟันผุอย่างรวดเร็ว</span></button>`, `<button onclick="selectCase4Subpath('G2')" id="btn-c4-sub-G2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง G2</span><span class="text-[11px] text-slate-700 mt-0.5">ระงับแนวทางเจลกรดเนื่องจากคนไข้เสียวฟันและผิวเนื้อฟันไวต่อสภาวะกรดจัด</span></button>`);
+                subpathsDiv.innerHTML = renderShuffledPair(`<button onclick="selectCase4Subpath('G1')" id="btn-c4-sub-G1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง G1</span><span class="text-[11px] text-slate-700 mt-0.5">บ่มเจลกรดทิ้งไว้ 4 นาทีหวังผลตกผลึกผิวรากฟันผุอย่างรวดเร็ว</span></button>`, `<button onclick="selectCase4Subpath('G2')" id="btn-c4-sub-G2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง G2</span><span class="text-[11px] text-slate-700 mt-0.5">ระงับแนวทางเจลกรดเนื่องจากคนไข้เสียวฟันและผิวเนื้อฟันไวต่อสภาวะกรดจัด</span></button>`);
             } else {
-                subpathsDiv.innerHTML = renderShuffledPair(`<button onclick="selectCase4Subpath('H1')" id="btn-c4-sub-H1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง H1</span><span class="text-[11px] text-slate-700 mt-0.5">ทาวาร์นิช 5% NaF บริเวณเหงือกร่นเสียว และแนะนำงดแปรงฟันในวันนั้น</span></button>`, `<button onclick="selectCase4Subpath('H2')" id="btn-c4-sub-H2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง H2</span><span class="text-[11px] text-slate-700 mt-0.5">แนะนำให้ทายาสีฟันสมุนไพรลดเสียวฟันที่ไม่มีฟลูออไรด์</span></button>`);
+                subpathsDiv.innerHTML = renderShuffledPair(`<button onclick="selectCase4Subpath('H1')" id="btn-c4-sub-H1" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง H1</span><span class="text-[11px] text-slate-700 mt-0.5">ทาวาร์นิช 5% NaF บริเวณเหงือกร่นเสียว และงดแปรงฟัน 1 คืน</span></button>`, `<button onclick="selectCase4Subpath('H2')" id="btn-c4-sub-H2" class="flex flex-col text-left p-2.5 border border-slate-200 rounded-xl bg-white"><span class="font-bold text-[10px] text-indigo-600">เส้นทาง H2</span><span class="text-[11px] text-slate-700 mt-0.5">แนะนำให้ทายาสีฟันสมุนไพรลดเสียวฟันที่ไม่มีฟลูออไรด์</span></button>`);
             }
         }
 
@@ -958,7 +999,7 @@
             let msg = "";
             if (subpath === 'G1') msg = "อาการเสียวฟันกระฉูดรุนแรง! เจลกรด APF (pH 3.0-3.5) สัมผัสกับท่อเนื้อฟันที่เหงือกร่นจะยิ่งเพิ่มความระคายเคืองกระตุ้นอาการเสียวฟันอย่างรุนแรง";
             if (subpath === 'G2') msg = "ป้องกันภัยสำเร็จ! การหยุดใช้เจลกรดช่วยระงับพยาธิสภาพกระตุ้นระบบประสาทประสาทเสียวฟันได้อย่างถูกต้อง";
-            if (subpath === 'H1') msg = "วิเคราะห์เยี่ยมยอดไร้เทียมทาน! วาร์นิช NaF เป็นกลางช่วยบล็อกท่อเนื้อฟัน และงดแปรงในวันนั้นส่งผลให้เกราะผลึก FAP ตกตะกอนเสถียรที่สุด";
+            if (subpath === 'H1') msg = "วิเคราะห์เยี่ยมยอดไร้เทียมทาน! วาร์นิช NaF เป็นกลางช่วยบล็อกท่อเนื้อฟัน และงดแปรง 1 คืนส่งผลให้เกราะผลึก FAP ตกตะกอนเสถียรที่สุด";
             if (subpath === 'H2') msg = "ขาดกลไกตกตะกอน! การสลับไปแนะนำยาสีฟันที่ไม่มีฟลูออไรด์ส่งผลให้ผิวฟันขาดระบบฟื้นฟูแร่ธาตุคืนกลับ รอยสึกจะลุกลาม";
 
             if (isCorrect) {
